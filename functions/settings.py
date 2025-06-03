@@ -1,5 +1,10 @@
+import pygame
+import os
 from functions.get_screen_dimensions import get_screen_dimensions
+from functions.get_os_adapted_path import get_os_adapted_path
 # Ce fichier contient les paramètres de configuration du jeu {Variables globales}
+
+pygame.init()
 
 # Utilisation de la fonction pour obtenir les dimensions de l'écran
 WIDTH, HEIGHT = get_screen_dimensions()
@@ -114,25 +119,5 @@ MESSAGES_UNITE_TURC = {
         "Unidos, avançamos para o futuro.",
         "A unidade do povo é sua maior riqueza.",
         "Juntos, podemos superar qualquer obstáculo."
-    ],
-    "msgRU": [
-        "Единство — это сила.",
-        "Мы одно сердце.",
-        "Вместе мы непобедимы.",
-        "Гармония приносит величие.",
-        "Наша сила в нашем единстве.",
-        "Объединенные, мы движемся в будущее.",
-        "Единство народа — его величайшее богатство.",
-        "Вместе мы можем преодолеть любые препятствия."
-    ],
-    "msgAR": [
-        "الوحدة قوة.",
-        "نحن قلب واحد.",
-        "معًا، نحن لا نهزم.",
-        "الانسجام يجلب العظمة.",
-        "قوتنا تأتي من وحدتنا.",
-        "متحدون، نتجه نحو المستقبل.",
-        "وحدة الشعب هي أعظم ثرواته.",
-        "معًا، يمكننا التغلب على أي عقبة."
     ]
 }
