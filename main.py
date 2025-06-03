@@ -1,8 +1,9 @@
 import pygame
 import sys
-from settings import *
+from functions.settings import *
 from functions.debug import debug
 from functions.get_os_adapted_path import get_os_adapted_path
+from classes.level import Level
 
 
 class Game:
@@ -18,6 +19,7 @@ class Game:
             "The Legend of Turgut")
         self.clock = pygame.time.Clock()
         self.running = True
+        self.level = Level()
 
     def run(self):
         while self.running:
@@ -26,6 +28,7 @@ class Game:
                     self.running = False
 
             self.screen.fill((0, 0, 0))
+            self.level.run()
             debug("Game is running", 10, 10)
             pygame.display.flip()
             self.clock.tick(FPS)
