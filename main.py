@@ -19,7 +19,6 @@ class Game:
 
         # Configuration de la police (une seule fois dans __init__)
         apply_font()
-        debug("La police est appliquée", 10, 20)
 
         # Configuration du jeu
         self.clock = pygame.time.Clock()
@@ -60,7 +59,6 @@ class Game:
         """Gère le rendu du jeu"""
         self.screen.fill((0, 0, 0))
         self.level.run()
-        debug("Le jeu est lancé", 10, 10)
         pygame.display.flip()
 
 
