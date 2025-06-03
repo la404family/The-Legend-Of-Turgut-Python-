@@ -3,7 +3,9 @@ import sys
 from functions.settings import *
 from functions.debug import debug
 from functions.get_os_adapted_path import get_os_adapted_path
+from functions.apply_font import apply_font
 from classes.level import Level
+from classes.player import Player
 
 
 class Game:
@@ -16,9 +18,8 @@ class Game:
         self._setup_window()
 
         # Configuration de la police (une seule fois dans __init__)
-        pygame.font.init()
-        self.font = pygame.font.Font(
-            get_os_adapted_path("font", "Jet.ttf"), 24)
+        apply_font()
+        debug("La police est appliquée", 10, 20)
 
         # Configuration du jeu
         self.clock = pygame.time.Clock()

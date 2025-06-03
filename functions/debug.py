@@ -40,3 +40,14 @@ def debug(info, x=10, y=10):
 
     # Affichage du texte
     display_surface.blit(text_surf, text_rect)
+
+    # Le texte se retire automatiquement après 5 secondes
+    pygame.display.update(text_rect)  # Met à jour uniquement la zone du texte
+    # Timer pour retirer le texte
+    pygame.time.set_timer(pygame.USEREVENT, 5000)
+    # Gestion de l'événement pour retirer le texte
+    for event in pygame.event.get():
+        if event.type == pygame.USEREVENT:
+            pygame.time.set_timer(pygame.USEREVENT, 0)  # Stoppe le timer
+            display_surface.fill((0, 0, 0), bg_rect)  # Efface le fond
+            pygame.display.update(bg_rect)  # Met à jour la zone effacée
