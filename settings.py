@@ -1,0 +1,138 @@
+from functions.get_screen_dimensions import get_screen_dimensions
+# Ce fichier contient les paramètres de configuration du jeu {Variables globales}
+
+# Utilisation de la fonction pour obtenir les dimensions de l'écran
+WIDTH, HEIGHT = get_screen_dimensions()
+# Images par seconde
+FPS = 60
+# Taille de la tuile
+TILE_SIZE = 16
+# Teste de la carte du monde
+WORLD_MAP_TEST = [
+    ["x", "x", "x", "x", "x", "x", "x", "x", "x",
+        "x", "x", "x", "x", "x", "x", "x", "x"],
+    ["x", " ", " ", " ", " ", " ", " ", " ", " ",
+        " ", " ", " ", " ", " ", " ", " ", "x"],
+    ["x", " ", " ", "x", " ", " ", "p", " ", " ",
+        " ", " ", " ", " ", " ", " ", " ", "x"],
+    ["x", " ", " ", " ", " ", " ", " ", " ", " ",
+        " ", " ", " ", " ", " ", " ", " ", "x"],
+    ["x", " ", " ", " ", " ", "x", " ", " ", " ",
+        " ", " ", " ", " ", " ", " ", " ", "x"],
+    ["x", " ", " ", " ", " ", " ", " ", " ", " ",
+        " ", " ", " ", " ", " ", " ", " ", "x"],
+    ["x", " ", " ", " ", " ", " ", " ", " ", " ",
+        " ", "x", " ", " ", " ", " ", " ", "x"],
+    ["x", " ", " ", " ", " ", " ", " ", " ", " ",
+        " ", " ", " ", " ", " ", " ", " ", "x"],
+    ["x", " ", " ", " ", " ", " ", " ", " ", " ",
+        " ", " ", " ", " ", " ", " ", " ", "x"],
+    ["x", " ", " ", " ", " ", " ", " ", " ", " ",
+        " ", " ", " ", " ", " ", " ", " ", "x"],
+    ["x", " ", " ", " ", " ", " ", " ", " ", " ",
+        " ", " ", " ", " ", " ", " ", " ", "x"],
+    ["x", "x", "x", "x", "x", "x", "x", "x", "x",
+        "x", "x", "x", "x", "x", "x", "x", "x"]
+]
+
+TEXTES_DU_JEU = {
+    "welcome": "Bienvenue dans le jeu !",
+    "game_over": "Jeu terminé !",
+    "level_up": "Niveau supérieur atteint !",
+    "new_item": "Nouvel objet obtenu !",
+    "quest_complete": "Quête terminée !",
+    "error": "Une erreur est survenue !"
+}
+# Messages de l'unité turque
+MESSAGES_UNITE_TURC = {
+    "msgTR": [
+        "Birlik güçtür.",
+        "Biz tek yüreğiz.",
+        "Birlikte yenilmeziz.",
+        "Uyum büyüklüğü getirir.",
+        "Gücümüz birliğimizden gelir.",
+        "Birlikte geleceğe ilerliyoruz.",
+        "Halkın birliği en büyük zenginliğidir.",
+        "Birlikte her şeyin üstesinden gelebiliriz."
+    ],
+    "msgFR": [
+        "L’unité fait la force.",
+        "Nous sommes un seul cœur.",
+        "Ensemble, nous sommes invincibles.",
+        "L'harmonie crée la grandeur.",
+        "Notre force vient de notre unité.",
+        "Unis, nous avançons vers l’avenir.",
+        "L’unité du peuple est sa plus grande richesse.",
+        "Ensemble, nous pouvons surmonter tous les obstacles."
+    ],
+    "msgEN": [
+        "Unity is strength.",
+        "We are one heart.",
+        "Together, we are invincible.",
+        "Harmony brings greatness.",
+        "Our strength comes from our unity.",
+        "United, we move towards the future.",
+        "The unity of the people is its greatest wealth.",
+        "Together, we can overcome any obstacle."
+    ],
+    "msgDE": [
+        "Einheit ist Stärke.",
+        "Wir sind ein Herz.",
+        "Gemeinsam sind wir unbesiegbar.",
+        "Harmonie bringt Größe.",
+        "Unsere Stärke kommt aus unserer Einheit.",
+        "Vereint schreiten wir in die Zukunft.",
+        "Die Einheit des Volkes ist sein größter Reichtum.",
+        "Gemeinsam können wir jedes Hindernis überwinden."
+    ],
+    "msgES": [
+        "La unidad es fuerza.",
+        "Somos un solo corazón.",
+        "Juntos, somos invencibles.",
+        "La armonía trae grandeza.",
+        "Nuestra fuerza proviene de nuestra unidad.",
+        "Unidos, avanzamos hacia el futuro.",
+        "La unidad del pueblo es su mayor riqueza.",
+        "Juntos, podemos superar cualquier obstáculo."
+    ],
+    "msgIT": [
+        "L'unità è forza.",
+        "Siamo un solo cuore.",
+        "Insieme, siamo invincibili.",
+        "L'armonia porta grandezza.",
+        "La nostra forza deriva dalla nostra unità.",
+        "Uniti, ci muoviamo verso il futuro.",
+        "L'unità del popolo è la sua più grande ricchezza.",
+        "Insieme, possiamo superare ogni ostacolo."
+    ],
+    "msgPT": [
+        "Unidade é força.",
+        "Somos um só coração.",
+        "Juntos, somos invencíveis.",
+        "Harmonia traz grandeza.",
+        "Nossa força vem da nossa unidade.",
+        "Unidos, avançamos para o futuro.",
+        "A unidade do povo é sua maior riqueza.",
+        "Juntos, podemos superar qualquer obstáculo."
+    ],
+    "msgRU": [
+        "Единство — это сила.",
+        "Мы одно сердце.",
+        "Вместе мы непобедимы.",
+        "Гармония приносит величие.",
+        "Наша сила в нашем единстве.",
+        "Объединенные, мы движемся в будущее.",
+        "Единство народа — его величайшее богатство.",
+        "Вместе мы можем преодолеть любые препятствия."
+    ],
+    "msgAR": [
+        "الوحدة قوة.",
+        "نحن قلب واحد.",
+        "معًا، نحن لا نهزم.",
+        "الانسجام يجلب العظمة.",
+        "قوتنا تأتي من وحدتنا.",
+        "متحدون، نتجه نحو المستقبل.",
+        "وحدة الشعب هي أعظم ثرواته.",
+        "معًا، يمكننا التغلب على أي عقبة."
+    ]
+}
