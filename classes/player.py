@@ -3,7 +3,7 @@ import pygame
 from functions.settings import *
 from functions.get_os_adapted_path import get_os_adapted_path
 from classes.keyboard import handler
-from classes.joystick import JoystickEventHandler
+from classes.joystick import joystick_handler
 
 pygame.init()
 # Pour utiliser la fonction avec un hook
@@ -28,12 +28,16 @@ class Player(pygame.sprite.Sprite):
         global player_direction_right
         global player_direction_stay
         global player_current_direction
+        global joystik_event_handler
+        # Initialisation des variables de direction du joueur
+
         player_direction_up = False
         player_direction_down = False
         player_direction_left = False
         player_direction_right = False
         player_direction_stay = True
         player_current_direction = "stay"
+        joystick_event_handler = None  # Initialisation de l'événement joystick
         # Récupère le scancode de l'événement
 
         """gestion du mouvement du joueur
@@ -41,11 +45,12 @@ class Player(pygame.sprite.Sprite):
         Touche : d, Code : 32  -- Droite
         Touche : z, Code : 17  -- Haut
         Touche : s, Code : 31  -- Bas"""
+        if joystick_handler.joystick is not None:
+            # Si une manette est connectée, on utilise les axes de la manette
+            joystick_handler.handle_events()
+            # Vérifie si l'axe gauche de la manette est utilisé
 
-        # Boucle principale qui surveille les changements de scancode
-
-        # Vérifie si le code correspond à 30
-        if handler.event_scan_code == 30:
+        if handler.event_scan_code == 30 or joystick_handler.joystick.get_axis(0) < -0.5 and handler.event_scan_code == None:
             print("Gauche")
             player_current_direction = "up"
             player_direction_up = True
