@@ -3,7 +3,7 @@ import keyboard
 
 from functions.settings import *
 from functions.get_os_adapted_path import get_os_adapted_path
-from functions.on_key_event import handler
+from classes.keyboard import handler
 
 pygame.init()
 # Pour utiliser la fonction avec un hook
@@ -63,6 +63,52 @@ class Player(pygame.sprite.Sprite):
             player_direction_stay = False
             self.direction.x = -1
             handler.event_scan_code = None  # Réinitialise l'événement après traitement
+        if handler.event_scan_code == 32:
+            print("Droite")
+            player_current_direction = "down"
+            player_direction_up = False
+            player_direction_down = False
+            player_direction_left = False
+            player_direction_right = True
+            player_direction_stay = False
+            self.direction.y = 1
+            player_current_direction = "right"
+            player_direction_left = False
+            player_direction_right = True
+            player_direction_up = False
+            player_direction_down = False
+            player_direction_stay = False
+            self.direction.x = 1
+            handler.event_scan_code = None  # Réinitialise l'événement après traitement
+        if handler.event_scan_code == 17:
+            print("Haut")
+            player_current_direction = "up"
+            player_direction_up = True
+            player_direction_down = False
+            player_direction_left = False
+            player_direction_right = False
+            player_direction_stay = False
+            self.direction.y = -1
+            handler.event_scan_code = None
+        if handler.event_scan_code == 31:
+            print("Bas")
+            player_current_direction = "down"
+            player_direction_up = False
+            player_direction_down = True
+            player_direction_left = False
+            player_direction_right = False
+            player_direction_stay = False
+            self.direction.y = 1
+            handler.event_scan_code = None
+        if handler.event_scan_code is None:
+            player_current_direction = "stay"
+            player_direction_up = False
+            player_direction_down = False
+            player_direction_left = False
+            player_direction_right = False
+            player_direction_stay = True
+            self.direction.x = 0
+            self.direction.y = 0
 
     def update(self):
         """update du joueur"""

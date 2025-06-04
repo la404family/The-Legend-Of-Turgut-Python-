@@ -7,8 +7,6 @@ class KeyEventHandler:
 
     def on_key_event(self, event):
         self.event_scan_code = event.scan_code
-        print(type(self.event_scan_code))
-        print(f"Code : {self.event_scan_code}")
 
 
 handler = KeyEventHandler()
