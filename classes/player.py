@@ -1,8 +1,8 @@
 import pygame
 import keyboard
-from functions.on_key_event import on_key_event
 from functions.settings import *
 from functions.get_os_adapted_path import get_os_adapted_path
+from functions.on_key_event import on_key_event
 
 pygame.init()
 
@@ -33,14 +33,22 @@ class Player(pygame.sprite.Sprite):
         player_direction_right = False
         player_direction_stay = True
         player_current_direction = "stay"
-        try:
-            if jpad:
-                jpad.init()
-        except pygame.error:
-            jpad = None
 
-        """gestion du mouvement du joueur"""
-        if keyboard.is_pressed("up") or (jpad and jpad.get_axis(1) < -0.5):
+        """gestion du mouvement du joueur
+        Touche : q, Code : 30  -- Haut
+        Touche : d, Code : 32  -- Droite
+        Touche : z, Code : 17  -- Bas
+        Touche : s, Code : 31  -- Gauche"""
+        print(f"Ligne ${keyboard.on_press(on_key_event)}")
+        if keyboard.on_press(on_key_event) == 32:
+            print("Haut (Joystick)")
+            player_current_direction = "up"
+            player_direction_up = True
+            player_direction_down = False
+            player_direction_left = False
+            player_direction_right = False
+            player_direction_stay = False
+            self.direction.y = -1
             player_current_direction = "left"
             player_direction_left = True
             player_direction_right = False
