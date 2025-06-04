@@ -1,7 +1,6 @@
 import pygame
 import keyboard
 from functions.on_key_event import on_key_event
-from functions.debug import debug
 from functions.settings import *
 from functions.get_os_adapted_path import get_os_adapted_path
 

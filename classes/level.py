@@ -21,7 +21,7 @@ class Level:
                     Tile((x, y), [self.visible_sprites, self.obstacle_sprites])
                 if col == "p":
                     from classes.player import Player
-                    Player((x, y), [self.visible_sprites])
+                    self.player = Player((x, y), [self.visible_sprites])
 
     def run(self):
         self.visible_sprites.draw(self.display_surface)
