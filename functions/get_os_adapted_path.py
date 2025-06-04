@@ -1,4 +1,5 @@
 import os
+
 # Cette fonction permet d'adapter un chemin de fichier en fonction du système d'exploitation.
 # Elle retourne  :chemin = os.path.join(".", dossier, fichier)  # => './assets/favicon.png' (adapté à l'OS)
 
