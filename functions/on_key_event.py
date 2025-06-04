@@ -1,15 +1,18 @@
 import keyboard
 
-event_scan_code = None  # Variable globale
+
+class KeyEventHandler:
+    def __init__(self):
+        self.event_scan_code = None
+
+    def on_key_event(self, event):
+        self.event_scan_code = event.scan_code
+        print(type(self.event_scan_code))
+        print(f"Code : {self.event_scan_code}")
 
 
-def on_key_event(event):
-    global event_scan_code  # Indique qu'on modifie la variable globale
-    event_scan_code = event.scan_code
-    print(f"Key pressed: {event.name}, Scan code: {event.scan_code}")
-
-
-keyboard.on_press(on_key_event)
+handler = KeyEventHandler()
+keyboard.on_press(handler.on_key_event)
 """
 La fonction on_key_event est appelée à chaque fois qu'une touche est pressée.
 Voici les codes des touches pour les claviers AZERTY  :

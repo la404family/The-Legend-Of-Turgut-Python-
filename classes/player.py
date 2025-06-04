@@ -3,8 +3,8 @@ import keyboard
 
 from functions.settings import *
 from functions.get_os_adapted_path import get_os_adapted_path
-from functions.on_key_event import on_key_event
-from functions.on_key_event import event_scan_code
+from functions.on_key_event import handler
+
 pygame.init()
 # Pour utiliser la fonction avec un hook
 
@@ -46,9 +46,8 @@ class Player(pygame.sprite.Sprite):
         # Boucle principale qui surveille les changements de scancode
 
         # Vérifie si le code correspond à 30
-        if event_scan_code == 30:
-            print("c'est ok !")
-            print("Haut")
+        if handler.event_scan_code == 30:
+            print("Gauche")
             player_current_direction = "up"
             player_direction_up = True
             player_direction_down = False
@@ -63,6 +62,7 @@ class Player(pygame.sprite.Sprite):
             player_direction_down = False
             player_direction_stay = False
             self.direction.x = -1
+            handler.event_scan_code = None  # Réinitialise l'événement après traitement
 
     def update(self):
         """update du joueur"""
