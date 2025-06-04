@@ -1,24 +1,23 @@
 import keyboard
 
+event_scan_code = None  # Variable globale
+
 
 def on_key_event(event):
-    event_scan_code = str(event.scan_code)  # Convertit le scancode en string
-    print(f"Touche pressée : {event.name}, Code : {event_scan_code}")
-    print(event_scan_code)
-    return event_scan_code
+    global event_scan_code  # Indique qu'on modifie la variable globale
+    event_scan_code = event.scan_code
+    print(f"Key pressed: {event.name}, Scan code: {event.scan_code}")
 
 
-# Pour utiliser la fonction avec un hook
-# keyboard.on_press(on_key_event)
-
+keyboard.on_press(on_key_event)
 """
 La fonction on_key_event est appelée à chaque fois qu'une touche est pressée.
 Voici les codes des touches pour les claviers AZERTY  :
 Pour LES MOUVEMENTS : 
-Touche : q, Code : 30  -- Haut
+Touche : q, Code : 30  -- Gauche
 Touche : d, Code : 32  -- Droite
-Touche : z, Code : 17  -- Bas
-Touche : s, Code : 31  -- Gauche
+Touche : z, Code : 17  -- Haut
+Touche : s, Code : 31  -- Bas
 Pour LES ACTIONS :
 Touche : u, Code : 22   -- touche X
 Touche : i, Code : 23   -- touche B
