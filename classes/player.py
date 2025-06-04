@@ -1,9 +1,9 @@
 import pygame
-import keyboard
 
 from functions.settings import *
 from functions.get_os_adapted_path import get_os_adapted_path
 from classes.keyboard import handler
+from classes.joystick import JoystickEventHandler
 
 pygame.init()
 # Pour utiliser la fonction avec un hook
@@ -20,8 +20,7 @@ class Player(pygame.sprite.Sprite):
 
     def input(self):
         """initialisation du clavier et du joystick"""
-        # jpad = pygame.joystick.Joystick(
-        #     0) if pygame.joystick.get_count() > 0 else None  # Removed unused variable
+
         """ initialisation des variables de direction du joueur"""
         global player_direction_up
         global player_direction_down
