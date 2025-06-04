@@ -48,7 +48,6 @@ class Player(pygame.sprite.Sprite):
         if joystick_handler.joystick is not None:
             # Si une manette est connectée, on utilise les axes de la manette
             joystick_handler.handle_events()
-            # Vérifie si l'axe gauche de la manette est utilisé
 
         if handler.event_scan_code == 30 or joystick_handler.joystick.get_axis(0) < -0.5 and handler.event_scan_code == None:
             print("Gauche")
@@ -67,7 +66,7 @@ class Player(pygame.sprite.Sprite):
             player_direction_stay = False
             self.direction.x = -1
             handler.event_scan_code = None  # Réinitialise l'événement après traitement
-        if handler.event_scan_code == 32:
+        if handler.event_scan_code == 32 or joystick_handler.joystick.get_axis(0) > 0.5 and handler.event_scan_code == None:
             print("Droite")
             player_current_direction = "down"
             player_direction_up = False
@@ -84,7 +83,7 @@ class Player(pygame.sprite.Sprite):
             player_direction_stay = False
             self.direction.x = 1
             handler.event_scan_code = None  # Réinitialise l'événement après traitement
-        if handler.event_scan_code == 17:
+        if handler.event_scan_code == 17 or joystick_handler.joystick.get_axis(1) < -0.5 and handler.event_scan_code == None:
             print("Haut")
             player_current_direction = "up"
             player_direction_up = True
@@ -94,7 +93,7 @@ class Player(pygame.sprite.Sprite):
             player_direction_stay = False
             self.direction.y = -1
             handler.event_scan_code = None
-        if handler.event_scan_code == 31:
+        if handler.event_scan_code == 31 or joystick_handler.joystick.get_axis(1) > 0.5 and handler.event_scan_code == None:
             print("Bas")
             player_current_direction = "down"
             player_direction_up = False
