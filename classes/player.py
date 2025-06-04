@@ -5,6 +5,7 @@ from functions.get_os_adapted_path import get_os_adapted_path
 from classes.keyboard import handler
 from classes.joystick import joystick_handler
 
+
 pygame.init()
 # Pour utiliser la fonction avec un hook
 
@@ -52,51 +53,37 @@ class Player(pygame.sprite.Sprite):
             # Sinon, on utilise le clavier
             handler.handle_events()
 
-        if handler.event_scan_code == 30 or joystick_handler.joystick.get_axis(0) < -0.5 and player_current_direction == "stay":
+        if handler.event_scan_code == 30 or joystick_handler.joystick.get_axis(0) < -0.5:
             print("Gauche")
+            self.direction.x = -1
+            self.direction.y = 0  # Assurer aucun mouvement vertical
+            player_current_direction = "left"
+
+        elif handler.event_scan_code == 32 or joystick_handler.joystick.get_axis(0) > 0.5:
+            print("Droite")
+            self.direction.x = 1
+            self.direction.y = 0  # Assurer aucun mouvement vertical
+            player_current_direction = "right"
+        elif handler.event_scan_code == 17 or joystick_handler.joystick.get_axis(1) < -0.5:
+            print("Haut")
+            self.direction.x = 0  # Assurer aucun mouvement horizontal
             self.direction.y = -1
             player_current_direction = "up"
-            player_direction_up = False
-            player_direction_down = False
-            player_direction_left = True
-            player_direction_right = False
-            player_direction_stay = False
-        elif handler.event_scan_code == 32 or joystick_handler.joystick.get_axis(0) > 0.5 and player_current_direction == "stay":
-            print("Droite")
+        elif handler.event_scan_code == 31 or joystick_handler.joystick.get_axis(1) > 0.5:
+            print("Bas")
+            self.direction.x = 0  # Assurer aucun mouvement horizontal
             self.direction.y = 1
             player_current_direction = "down"
-            player_direction_up = False
-            player_direction_down = False
-            player_direction_left = False
-            player_direction_right = True
-            player_direction_stay = False
-        elif handler.event_scan_code == 17 or joystick_handler.joystick.get_axis(1) < -0.5 and player_current_direction == "stay":
-            print("Haut")
-            self.direction.x = -1
-            player_current_direction = "up"
-            player_direction_up = True
-            player_direction_down = False
-            player_direction_left = False
-            player_direction_right = False
-            player_direction_stay = False
-        elif handler.event_scan_code == 31 or joystick_handler.joystick.get_axis(1) > 0.5 and player_current_direction == "stay":
-            print("Bas")
-            self.direction.x = 1
-            player_current_direction = "down"
-            player_direction_up = False
-            player_direction_down = True
-            player_direction_left = False
-            player_direction_right = False
-            player_direction_stay = False
+        # si aucune touche n'est pressée, le joueur reste en place
+        elif handler.event_scan_code is None or handler.event_scan_code == 0:
+            print("Aucune touche pressée")
+            self.direction.x = 0
+            self.direction.y = 0
+            player_current_direction = "stay"
         else:
             print("Rester")
             self.direction = pygame.math.Vector2(0, 0)
             player_current_direction = "stay"
-            player_direction_up = False
-            player_direction_down = False
-            player_direction_left = False
-            player_direction_right = False
-            player_direction_stay = True
 
     def move(self, speed):
         """déplacement du joueur"""

@@ -6,11 +6,20 @@ class KeyEventHandler:
         self.event_scan_code = None
 
     def on_key_event(self, event):
-        self.event_scan_code = event.scan_code
+        if event.event_type == 'down':
+            # Si une touche est déjà enregistrée comme pressée, on ne fait rien
+            if self.event_scan_code is not None:
+                return
+            self.event_scan_code = event.scan_code
+            print(f"Touche pressée : {event.name}")
+
+        elif event.event_type == 'up':
+            self.event_scan_code = None
+            print(f"Touche relâchée : {event.name}")
 
 
 handler = KeyEventHandler()
-keyboard.on_press(handler.on_key_event)
+keyboard.hook(handler.on_key_event)
 """
 La fonction on_key_event est appelée à chaque fois qu'une touche est pressée.
 Voici les codes des touches pour les claviers AZERTY  :
