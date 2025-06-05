@@ -1,0 +1,44 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "mapProjet.tmx",
+    "expandedProjectPaths": [
+    ],
+    "fileStates": {
+        "mapProjet.tmx": {
+            "scale": 3,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": -25.666666666666686,
+                "y": -10
+            }
+        },
+        "mapProjet.tmx#OverworldTurgut": {
+            "scaleInDock": 1.5
+        }
+    },
+    "last.exportedFilePath": "C:/Documents perso/0000Site internet/Du Chevreuil/Jeu The legend Of Turgut (python)/imagesOfMaps",
+    "last.imagePath": "C:/Users/kevin/Downloads/Overhead Adventure1.4/Super Overhead Adventure/Environments",
+    "map.fixedSize": false,
+    "map.height": 16,
+    "map.lastUsedExportFilter": "Fichiers de carte Tiled (*.tmx *.xml)",
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
+    "map.width": 16,
+    "openFiles": [
+        "mapProjet.tmx"
+    ],
+    "project": "mapProjet.tiled-project",
+    "recentFiles": [
+        "mapProjet.tmx"
+    ],
+    "tileset.embedInMap": true,
+    "tileset.tileSize": {
+        "height": 16,
+        "width": 16
+    },
+    "tileset.transparentColor": "#000000"
+}
