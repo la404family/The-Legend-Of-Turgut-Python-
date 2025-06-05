@@ -48,14 +48,6 @@ class Level:
                                 'obstacle', tile_surface)
                     obstacle_tiles.append(tile)
 
-        # # Importer les données de la carte depuis les fichiers CSV
-        # terrain_layout = import_csv_layout(
-        #     get_os_adapted_path("imagesOfMaps", "mapArbres_Floor.csv"))
-        # details_layout = import_csv_layout(
-        #     get_os_adapted_path("imagesOfMaps", "mapArbres_details.csv"))
-        # obstacle_layout = import_csv_layout(
-        #     get_os_adapted_path("imagesOfMaps", "mapArbres_arbres.csv"))
-
         # Positionner le joueur à une position aléatoire dans PLAYER_START_POSITION
         random_position = random.choice(PLAYER_START_POSITION)
         self.player = Player(
