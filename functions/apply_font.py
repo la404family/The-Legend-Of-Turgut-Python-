@@ -1,5 +1,5 @@
 import pygame
-from functions.settings import TILE_SIZE
+from settings.settings import TILE_SIZE
 from functions.get_os_adapted_path import get_os_adapted_path
 
 

@@ -2,7 +2,7 @@ import pygame
 import ctypes
 import locale
 
-from functions.settings import *
+from settings.settings import *
 
 
 def get_keyboard_type():

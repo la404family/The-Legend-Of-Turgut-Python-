@@ -1,7 +1,7 @@
 import pygame
 import sys
 
-from functions.settings import *
+from settings.settings import *
 from functions.debug import debug
 from functions.get_os_adapted_path import get_os_adapted_path
 from functions.apply_font import apply_font

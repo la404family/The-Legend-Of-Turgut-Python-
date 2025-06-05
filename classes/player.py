@@ -1,6 +1,6 @@
 import pygame
 
-from functions.settings import *
+from settings.settings import *
 from functions.get_os_adapted_path import get_os_adapted_path
 from classes.keyboard import handler
 from classes.joystick import joystick_handler
@@ -11,7 +11,7 @@ pygame.init()
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, pos, groups):
+    def __init__(self, pos, groups, obstacle_sprites):
         super().__init__(groups)
         self.image = pygame.Surface((TILE_SIZE, TILE_SIZE))
         self.image = pygame.image.load(
@@ -19,6 +19,7 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(topleft=pos)
         self.direction = pygame.math.Vector2()
         self.speed = PLAYER_SPEED
+        self.obstacle_sprites = obstacle_sprites
 
     def input(self):
         """initialisation du clavier et du joystick"""
@@ -54,46 +55,56 @@ class Player(pygame.sprite.Sprite):
             handler.handle_events()
 
         if handler.event_scan_code == 30 or joystick_handler.joystick.get_axis(0) < -0.5:
-            print("Gauche")
             self.direction.x = -1
             self.direction.y = 0  # Assurer aucun mouvement vertical
             player_current_direction = "left"
 
         elif handler.event_scan_code == 32 or joystick_handler.joystick.get_axis(0) > 0.5:
-            print("Droite")
             self.direction.x = 1
             self.direction.y = 0  # Assurer aucun mouvement vertical
             player_current_direction = "right"
         elif handler.event_scan_code == 17 or joystick_handler.joystick.get_axis(1) < -0.5:
-            print("Haut")
+
             self.direction.x = 0  # Assurer aucun mouvement horizontal
             self.direction.y = -1
             player_current_direction = "up"
         elif handler.event_scan_code == 31 or joystick_handler.joystick.get_axis(1) > 0.5:
-            print("Bas")
             self.direction.x = 0  # Assurer aucun mouvement horizontal
             self.direction.y = 1
             player_current_direction = "down"
         # si aucune touche n'est pressée, le joueur reste en place
         elif handler.event_scan_code is None or handler.event_scan_code == 0:
-            print("Aucune touche pressée")
             self.direction.x = 0
             self.direction.y = 0
             player_current_direction = "stay"
         else:
-            print("Rester")
             self.direction = pygame.math.Vector2(0, 0)
             player_current_direction = "stay"
 
     def move(self, speed):
         """déplacement du joueur"""
-        self.rect.center += self.direction * speed
-        if self.rect.left < 0:
-            self.rect.left = 0
-        if self.rect.right > WIDTH:
-            self.rect.right = WIDTH
-        if self.rect.top < 0:
-            self.rect.top = 0
+        self.rect.x += self.direction.x * speed
+        self.collision("horizontal")
+        self.rect.y += self.direction.y * speed
+        self.collision("vertical")
+
+    def collision(self, direction):
+        """vérification des collisions du joueur"""
+        if direction == "horizontal":
+            for sprite in self.obstacle_sprites:
+                if self.rect.colliderect(sprite.rect):
+                    if self.direction.x > 0:
+                        self.rect.right = sprite.rect.left
+                    if self.direction.x < 0:
+                        self.rect.left = sprite.rect.right
+
+        if direction == "vertical":
+            for sprite in self.obstacle_sprites:
+                if self.rect.colliderect(sprite.rect):
+                    if self.direction.y > 0:
+                        self.rect.bottom = sprite.rect.top
+                    if self.direction.y < 0:
+                        self.rect.top = sprite.rect.bottom
 
     def update(self):
         """update du joueur"""

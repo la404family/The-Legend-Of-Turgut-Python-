@@ -1,5 +1,5 @@
 import pygame
-from functions.settings import *
+from settings.settings import *
 from classes.tile import Tile
 from classes.player import Player
 from classes.tile import Tile
@@ -20,7 +20,8 @@ class Level:
                 if col == "x":
                     Tile((x, y), [self.visible_sprites, self.obstacle_sprites])
                 if col == "p":
-                    self.player = Player((x, y), [self.visible_sprites])
+                    self.player = Player(
+                        (x, y), [self.visible_sprites], self.obstacle_sprites)
 
     def run(self):
         self.visible_sprites.draw(self.display_surface)

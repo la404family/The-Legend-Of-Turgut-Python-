@@ -1,5 +1,5 @@
 import pygame
-from functions.settings import *
+from settings.settings import *
 from functions.get_os_adapted_path import get_os_adapted_path
 
 

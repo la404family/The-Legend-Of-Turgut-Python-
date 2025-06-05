@@ -11,11 +11,9 @@ class KeyEventHandler:
             if self.event_scan_code is not None:
                 return
             self.event_scan_code = event.scan_code
-            print(f"Touche pressée : {event.name}")
 
         elif event.event_type == 'up':
             self.event_scan_code = None
-            print(f"Touche relâchée : {event.name}")
 
 
 handler = KeyEventHandler()
