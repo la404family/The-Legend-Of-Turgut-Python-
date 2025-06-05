@@ -17,27 +17,36 @@ class Level:
         self.create_map()
 
     def create_map(self):
-        """Crée la carte du niveau à partir d'une image PNG d'obstacles"""
+
         # Charger l'image des obstacles
         obstacle_image = pygame.image.load(
             get_os_adapted_path("imagesOfMaps", "mapArbres.png")).convert_alpha()
 
-        # # L'image est un obstacle sauf si elle est transparente (alpha = 0)
-        # obstacle_tiles = []
-        # for y in range(0, obstacle_image.get_height(), TILE_SIZE):
-        #     for x in range(0, obstacle_image.get_width(), TILE_SIZE):
-        #         tile_surface = obstacle_image.subsurface(
-        #             (x, y, TILE_SIZE, TILE_SIZE))
-        #         if tile_surface.get_alpha() != 0:
-        #             # Si le tile n'est pas transparent, on le considère comme un obstacle
-        #             obstacle_tile = Tile(
-        #                 (x, y), [self.visible_sprites, self.obstacle_sprites], 'obstacle', tile_surface)
-        #             obstacle_tiles.append(obstacle_tile)
+        # L'image est un obstacle seulement si elle contient des pixels non transparents
+        # sur toute la zone 16x16 de la tuile
+        obstacle_tiles = []
+        for y in range(0, obstacle_image.get_height(), TILE_SIZE):
+            for x in range(0, obstacle_image.get_width(), TILE_SIZE):
+                tile_surface = obstacle_image.subsurface(
+                    (x, y, TILE_SIZE, TILE_SIZE))
 
-        # faire un random sur le tableau PLAYER_START_POSITION
-        random_position = random.choice(PLAYER_START_POSITION)
-        self.player = Player(
-            (random_position), [self.visible_sprites], self.obstacle_sprites)
+                # Vérifier si la tuile contient au moins un pixel non transparent
+                has_obstacle = False
+                for ty in range(TILE_SIZE):
+                    for tx in range(TILE_SIZE):
+                        # Obtenir la valeur alpha du pixel (tx, ty)
+                        alpha = tile_surface.get_at((tx, ty))[3]
+                        if alpha > 0:  # Si alpha > 0, pixel non transparent
+                            has_obstacle = True
+                            break
+                    if has_obstacle:
+                        break
+
+                if has_obstacle:
+                    # Si la tuile contient au moins un pixel non transparent, on la considère comme un obstacle
+                    tile = Tile((x, y), [self.visible_sprites, self.obstacle_sprites],
+                                'obstacle', tile_surface)
+                    obstacle_tiles.append(tile)
 
         # # Importer les données de la carte depuis les fichiers CSV
         # terrain_layout = import_csv_layout(
