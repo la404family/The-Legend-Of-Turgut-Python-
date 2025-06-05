@@ -1,7 +1,8 @@
 import pygame
 from settings.settings import *
-from classes.level import Level
-from classes.player import Player
+from classes.level import *
+from classes.player import *
+from classes.tile import Tile
 
 
 class YsortCameraGroup(pygame.sprite.Group):
@@ -15,6 +16,6 @@ class YsortCameraGroup(pygame.sprite.Group):
     def custom_draw(self, player):
         self.offset.x = player.rect.centerx - self.half_width
         self.offset.y = player.rect.centery - self.half_height
-        for sprite in self.sprites():
+        for sprite in sorted(self.sprites(), key=lambda sprite: sprite.rect.centery):
             offset_pos = sprite.rect.topleft - self.offset
             self.display_surface.blit(sprite.image, offset_pos)

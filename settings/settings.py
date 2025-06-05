@@ -14,6 +14,8 @@ FPS = 60
 TILE_SIZE = 16
 # Vitesse du joueur
 PLAYER_SPEED = 2
+# Décalage de la hitbox du joueur
+PLAYER_HITBOX_OFFSET = 1
 # Teste de la carte du monde
 WORLD_MAP_TEST = [
     ["x", "x", "x", "x", "x", "x", "x", "x", "x",

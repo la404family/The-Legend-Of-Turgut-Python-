@@ -17,6 +17,7 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.image.load(
             get_os_adapted_path("imagesOfTurgut", "row-6-column-1.png")).convert_alpha()
         self.rect = self.image.get_rect(topleft=pos)
+        self.hitbox = self.rect.inflate(0, -PLAYER_HITBOX_OFFSET)
         self.direction = pygame.math.Vector2()
         self.speed = PLAYER_SPEED
         self.obstacle_sprites = obstacle_sprites
@@ -83,28 +84,30 @@ class Player(pygame.sprite.Sprite):
 
     def move(self, speed):
         """déplacement du joueur"""
-        self.rect.x += self.direction.x * speed
+        self.hitbox.x += self.direction.x * speed
         self.collision("horizontal")
-        self.rect.y += self.direction.y * speed
+        self.hitbox.y += self.direction.y * speed
         self.collision("vertical")
+        # Met à jour la position du rectangle de collision
+        self.rect.center = self.hitbox.center
 
     def collision(self, direction):
         """vérification des collisions du joueur"""
         if direction == "horizontal":
             for sprite in self.obstacle_sprites:
-                if self.rect.colliderect(sprite.rect):
+                if hasattr(sprite, "hitbox") and sprite.hitbox.colliderect(self.hitbox):
                     if self.direction.x > 0:
-                        self.rect.right = sprite.rect.left
+                        self.hitbox.right = sprite.hitbox.left
                     if self.direction.x < 0:
-                        self.rect.left = sprite.rect.right
+                        self.hitbox.left = sprite.hitbox.right
 
         if direction == "vertical":
             for sprite in self.obstacle_sprites:
-                if self.rect.colliderect(sprite.rect):
+                if hasattr(sprite, "hitbox") and sprite.hitbox.colliderect(self.hitbox):
                     if self.direction.y > 0:
-                        self.rect.bottom = sprite.rect.top
+                        self.hitbox.bottom = sprite.hitbox.top
                     if self.direction.y < 0:
-                        self.rect.top = sprite.rect.bottom
+                        self.hitbox.top = sprite.hitbox.bottom
 
     def update(self):
         """update du joueur"""
