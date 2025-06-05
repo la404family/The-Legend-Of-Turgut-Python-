@@ -1,6 +1,7 @@
 import pygame
 import sys
 
+from random import choice
 from settings.settings import *
 from functions.debug import debug
 from functions.get_os_adapted_path import get_os_adapted_path
