@@ -17,7 +17,8 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.image.load(
             get_os_adapted_path("imagesOfTurgut", "row-6-column-1.png")).convert_alpha()
         self.rect = self.image.get_rect(topleft=pos)
-        self.hitbox = self.rect.inflate(0, -PLAYER_HITBOX_OFFSET)
+        self.hitbox = self.rect.inflate(-PLAYER_HITBOX_OFFSET, -
+                                        PLAYER_HITBOX_OFFSET)
         self.direction = pygame.math.Vector2()
         self.speed = PLAYER_SPEED
         self.obstacle_sprites = obstacle_sprites
