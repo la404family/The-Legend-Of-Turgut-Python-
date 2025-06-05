@@ -15,7 +15,7 @@ class Game:
         pygame.init()
 
         # Configuration de la fenêtre
-        self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
+        self.screen = pygame.display.set_mode((WIDTH, HEIGHT), pygame.SCALED)
         self._setup_window()
 
         # Configuration de la police (une seule fois dans __init__)
