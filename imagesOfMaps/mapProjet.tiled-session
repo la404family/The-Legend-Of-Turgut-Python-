@@ -3,16 +3,27 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "mapProjet.tmx",
+    "activeFile": "mapProjet..room.gmx.room.gmx.room.gmx.tmx",
     "expandedProjectPaths": [
     ],
     "fileStates": {
+        "mapProjet..room.gmx.room.gmx.room.gmx.tmx": {
+            "scale": 0.33,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 745.4545454545454,
+                "y": -142.4242424242425
+            }
+        },
+        "mapProjet..room.gmx.room.gmx.room.gmx.tmx#OverworldTurgut": {
+            "scaleInDock": 1
+        },
         "mapProjet.tmx": {
             "scale": 3,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": -25.666666666666686,
-                "y": -10
+                "x": 512,
+                "y": 255.83333333333331
             }
         },
         "mapProjet.tmx#OverworldTurgut": {
@@ -29,11 +40,13 @@
     "map.tileWidth": 16,
     "map.width": 16,
     "openFiles": [
-        "mapProjet.tmx"
+        "mapProjet.tmx",
+        "mapProjet..room.gmx.room.gmx.room.gmx.tmx"
     ],
     "project": "mapProjet.tiled-project",
     "recentFiles": [
-        "mapProjet.tmx"
+        "mapProjet.tmx",
+        "mapProjet..room.gmx.room.gmx.room.gmx.tmx"
     ],
     "tileset.embedInMap": true,
     "tileset.tileSize": {
