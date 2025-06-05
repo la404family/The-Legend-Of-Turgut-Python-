@@ -10,21 +10,15 @@ class YsortCameraGroup(pygame.sprite.Group):
     def __init__(self):
         super().__init__()
         self.display_surface = pygame.display.get_surface()
-        # Mettre en place les murs visibles du jeu
-        self.display_wall = pygame.Surface(
-            self.display_surface.get_size(), pygame.SRCALPHA)
         self.half_width = self.display_surface.get_size()[0] // 2
         self.half_height = self.display_surface.get_size()[1] // 2
         self.offset = pygame.math.Vector2()
-        self.zoom_scale = 1  # Facteur de zoom (x3)
+        self.zoom_scale = 3  # Facteur de zoom (x3)
 
         # creation du floor
         self.floor_surface = pygame.image.load(
             get_os_adapted_path("imagesOfMaps", "mapFloor.png")).convert_alpha()
         self.floor_rect = self.floor_surface.get_rect(topleft=(0, 0))
-        self.wall_surface = pygame.image.load(
-            get_os_adapted_path("imagesOfMaps", "mapArbres.png")).convert_alpha()
-        self.wall_rect = self.wall_surface.get_rect(topleft=(0, 0))
 
         # Créer une surface pour le zoom
         self.internal_surface_size = (self.display_surface.get_size()[0] // self.zoom_scale,

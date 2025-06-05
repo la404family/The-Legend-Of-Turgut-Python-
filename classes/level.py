@@ -22,9 +22,14 @@ class Level:
         #         if col == "x":
         #             Tile((x, y), [self.visible_sprites, self.obstacle_sprites])
         #         if col == "p":
+        # layouts = {
+        #     'obstacle': 'imagesOfMaps/mapArbres.csv',
+        # }
+        # for sprite_type, layout in layouts.items():
+        #     if sprite_type == 'obstacle':
+        #         self.create_obstacles(layout)
 
         # faire un random sur le tableau PLAYER_START_POSITION
-
         random_position = random.choice(PLAYER_START_POSITION)
         self.player = Player(
             (random_position), [self.visible_sprites], self.obstacle_sprites)
