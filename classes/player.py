@@ -123,17 +123,15 @@ class Player(pygame.sprite.Sprite):
         )
         # Gestion de l'état d'attaque
         if attack_buttons and not self.attacking:
-            self.attacking = True
-            self.speed = PLAYER_NO_SPEED
             self.attack_time = pygame.time.get_ticks()
+            self.attack_cooldown = ATTACK_COOLDOWN1
+            self.attacking = True
         elif not attack_buttons:
             self.attacking = False
 
         # Gestion de la vitesse du joueur
         if run_buttons and not self.attacking:
             self.speed = PLAYER_RUN_SPEED
-        elif not run_buttons and not self.attacking:
-            self.speed = PLAYER_SPEED
         else:
             self.speed = PLAYER_NO_SPEED
 
@@ -165,15 +163,20 @@ class Player(pygame.sprite.Sprite):
                         self.hitbox.top = sprite.hitbox.bottom
 
     def cooldowns(self):
-        """gère le cooldown de l'attaque"""
-        current_time = pygame.time.get_ticks()
-        # Durant l'attaque, on ne peut pas bouger NO_SPEED
-        if self.attacking and current_time - self.attack_time >= self.attack_cooldown:
-            self.attacking = False
-            self.speed = PLAYER_SPEED
+        """Gère le cooldown de l'attaque du joueur.
+        Pendant l'attaque, le joueur ne peut pas bouger (NO_SPEED).
+        Une fois le cooldown terminé, l'attaque s'arrête et la vitesse normale est rétablie.
+        """
 
-        if self.attacking:
-            self.speed = PLAYER_NO_SPEED
+        if self.attack_time is None:
+            self.attack_time = pygame.time.get_ticks()
+        if self.attack_time:
+            if pygame.time.get_ticks() - self.attack_time >= self.attack_cooldown:
+                self.attacking = False
+                self.speed = PLAYER_SPEED
+            if pygame.time.get_ticks() - self.attack_time < self.attack_cooldown:
+                print("Attaque en cours, cooldown actif.")
+                self.speed = PLAYER_NO_SPEED
 
     def update(self):
         """update du joueur"""
