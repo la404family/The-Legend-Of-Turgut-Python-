@@ -1,21 +1,17 @@
 import pygame
-
 from settings.settings import *
 from functions.get_os_adapted_path import get_os_adapted_path
-from classes.keyboard import handler
 from classes.joystick import joystick_handler
 
-
 pygame.init()
-# Pour utiliser la fonction avec un hook
 
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos, groups, obstacle_sprites):
         super().__init__(groups)
-        self.image = pygame.Surface((TILE_SIZE, TILE_SIZE))
         self.image = pygame.image.load(
-            get_os_adapted_path("imagesOfTurgut", "row-6-column-1.png")).convert_alpha()
+            get_os_adapted_path("imagesOfTurgut", "row-6-column-1.png")
+        ).convert_alpha()
         self.rect = self.image.get_rect(topleft=pos)
         self.hitbox = self.rect.inflate(-PLAYER_HITBOX_OFFSET, -
                                         PLAYER_HITBOX_OFFSET)
@@ -25,161 +21,118 @@ class Player(pygame.sprite.Sprite):
         self.attack_cooldown = ATTACK_COOLDOWN1
         self.attack_time = None
         self.obstacle_sprites = obstacle_sprites
+        self._setup_controls()
+
+    def _setup_controls(self):
+        """Initialisation des contrôles clavier et manette."""
+        self.key_mappings = {
+            'left': pygame.K_q,
+            'right': pygame.K_d,
+            'up': pygame.K_z,
+            'down': pygame.K_s,
+            'attack': [pygame.K_u, pygame.K_i, pygame.K_j, pygame.K_k],
+            'run': [pygame.K_o, pygame.K_p, pygame.K_l, pygame.K_m]
+        }
+
+        self.joystick_buttons = {
+            'attack': [0, 1, 2, 3],
+            'run': [4, 5],
+            'run_axes': [4, 5]
+        }
 
     def input(self):
-        """
-        MOUVEMENT DU JOUEUR
-        """
+        """Gestion du mouvement du joueur sans déplacement diagonal, avec support pour la manette."""
+        keys = pygame.key.get_pressed()
+        joystick = getattr(joystick_handler, "joystick", None)
 
-        """ initialisation des variables de direction du joueur"""
-        global player_direction_up
-        global player_direction_down
-        global player_direction_left
-        global player_direction_right
-        global player_direction_stay
-        global player_current_direction
-        # Initialisation des variables de direction du joueur
+        # Réinitialisation de la direction
+        self.direction.x, self.direction.y = 0, 0
 
-        player_direction_up = False
-        player_direction_down = False
-        player_direction_left = False
-        player_direction_right = False
-        player_direction_stay = True
-        player_current_direction = "stay"
-        joystick_event_handler = None  # Initialisation de l'événement joystick
-        # Récupère le scancode de l'événement
-
-        """gestion du mouvement du joueur
-        Touche : q, Code : 30  -- Gauche
-        Touche : d, Code : 32  -- Droite
-        Touche : z, Code : 17  -- Haut
-        Touche : s, Code : 31  -- Bas"""
-        if joystick_handler.joystick is not None:
-            # Si une manette est connectée, on utilise les axes de la manette
-            joystick_handler.handle_events()
-        else:
-            # Sinon, on utilise le clavier
-            handler.handle_events()
-
-        if handler.event_scan_code == 30 or joystick_handler.joystick.get_axis(0) < -0.5:
+        # Détection des touches clavier (priorité aux touches pressées)
+        if keys[self.key_mappings['left']]:
             self.direction.x = -1
-            self.direction.y = 0  # Assurer aucun mouvement vertical
-            player_current_direction = "left"
-
-        elif handler.event_scan_code == 32 or joystick_handler.joystick.get_axis(0) > 0.5:
+        elif keys[self.key_mappings['right']]:
             self.direction.x = 1
-            self.direction.y = 0  # Assurer aucun mouvement vertical
-            player_current_direction = "right"
-        elif handler.event_scan_code == 17 or joystick_handler.joystick.get_axis(1) < -0.5:
-
-            self.direction.x = 0  # Assurer aucun mouvement horizontal
+        elif keys[self.key_mappings['up']]:
             self.direction.y = -1
-            player_current_direction = "up"
-        elif handler.event_scan_code == 31 or joystick_handler.joystick.get_axis(1) > 0.5:
-            self.direction.x = 0  # Assurer aucun mouvement horizontal
+        elif keys[self.key_mappings['down']]:
             self.direction.y = 1
-            player_current_direction = "down"
-        # si aucune touche n'est pressée, le joueur reste en place
-        elif handler.event_scan_code is None or handler.event_scan_code == 0:
-            self.direction.x = 0
-            self.direction.y = 0
-            player_current_direction = "stay"
-        else:
-            self.direction = pygame.math.Vector2(0, 0)
-            player_current_direction = "stay"
 
-        """
-        ACTIONS DU JOUEUR
-        Touche : u, Code : 22   -- touche X
-        Touche : i, Code : 23   -- touche Y
-        Touche : o, Code : 24   -- touche LB
-        Touche : p, Code : 25   -- touche RT
-        Touche : j, Code : 36   -- touche A
-        Touche : k, Code : 37   -- touche B
-        Touche : l, Code : 38   -- touche RB
-        Touche : m, Code : 39   -- touche RB
-        """
-        # dictionnaire pour les touches d'attaque
-        attack_buttons = (
-            # touches u, i, j, k
-            handler.event_scan_code in {22, 23, 36, 37} or
-            (joystick_handler.joystick is not None and (
-                joystick_handler.joystick.get_button(0) or  # bouton A
-                joystick_handler.joystick.get_button(1) or  # bouton B
-                joystick_handler.joystick.get_button(2) or  # bouton X
-                joystick_handler.joystick.get_button(3)     # bouton Y
-            ))
-        )
-        # dictionnaire pour les touches de course
-        run_buttons = (
-            # touches o, p, l, m
-            handler.event_scan_code in {24, 25, 38, 39} or
-            (joystick_handler.joystick is not None and (
-                joystick_handler.joystick.get_button(4) or  # bouton LB
-                joystick_handler.joystick.get_button(5) or  # bouton RB
-                joystick_handler.joystick.get_axis(4) > 0.2 or  # trigger LT
-                joystick_handler.joystick.get_axis(5) > 0.2   # trigger RT
-            ))
-        )
+        # Détection des axes du joystick (si connecté et aucune touche clavier pressée)
+        if joystick and self.direction.length() == 0:
+            joystick_x = joystick.get_axis(0)
+            joystick_y = joystick.get_axis(1)
+
+            if abs(joystick_x) > abs(joystick_y):  # Priorité à l'axe dominant
+                if joystick_x < -0.5:
+                    self.direction.x = -1
+                elif joystick_x > 0.5:
+                    self.direction.x = 1
+            else:
+                if joystick_y < -0.5:
+                    self.direction.y = -1
+                elif joystick_y > 0.5:
+                    self.direction.y = 1
+
+        # Normalisation pour éviter les vecteurs diagonaux
+        if self.direction.length() > 0:
+            self.direction = self.direction.normalize()
+
         # Gestion de l'état d'attaque
-        if attack_buttons and not self.attacking:
+        attack_pressed = any(keys[btn] for btn in self.key_mappings['attack']) or (
+            joystick and any(joystick.get_button(btn)
+                             for btn in self.joystick_buttons['attack'])
+        )
+
+        if attack_pressed and not self.attacking:
             self.attack_time = pygame.time.get_ticks()
-            self.attack_cooldown = ATTACK_COOLDOWN1
             self.attacking = True
-        elif not attack_buttons:
-            self.attacking = False
 
-        # Gestion de la vitesse du joueur
-        if run_buttons and not self.attacking:
-            self.speed = PLAYER_RUN_SPEED
-        else:
-            self.speed = PLAYER_NO_SPEED
+        # Gestion de l'état de course
+        run_pressed = any(keys[btn] for btn in self.key_mappings['run']) or (
+            joystick and (
+                any(joystick.get_button(btn) for btn in self.joystick_buttons['run']) or
+                any(joystick.get_axis(axis) >
+                    0.2 for axis in self.joystick_buttons['run_axes'])
+            )
+        )
 
-    def move(self, speed):
-        """déplacement du joueur"""
-        self.hitbox.x += self.direction.x * speed
-        self.collision("horizontal")
-        self.hitbox.y += self.direction.y * speed
-        self.collision("vertical")
-        # Met à jour la position du rectangle de collision
-        self.rect.center = self.hitbox.center
+        self.speed = PLAYER_RUN_SPEED if run_pressed else PLAYER_SPEED
+
+    def move(self):
+        """Déplacement du joueur avec gestion des collisions."""
+        if self.direction.length() > 0:
+            self.hitbox.x += self.direction.x * self.speed
+            self.collision("horizontal")
+            self.hitbox.y += self.direction.y * self.speed
+            self.collision("vertical")
+            self.rect.center = self.hitbox.center
 
     def collision(self, direction):
-        """vérification des collisions du joueur"""
-        if direction == "horizontal":
-            for sprite in self.obstacle_sprites:
-                if hasattr(sprite, "hitbox") and sprite.hitbox.colliderect(self.hitbox):
-                    if self.direction.x > 0:
+        """Vérification des collisions du joueur."""
+        for sprite in self.obstacle_sprites:
+            if hasattr(sprite, "hitbox") and sprite.hitbox.colliderect(self.hitbox):
+                if direction == "horizontal":
+                    if self.direction.x > 0:  # Vers la droite
                         self.hitbox.right = sprite.hitbox.left
-                    if self.direction.x < 0:
+                    elif self.direction.x < 0:  # Vers la gauche
                         self.hitbox.left = sprite.hitbox.right
-
-        if direction == "vertical":
-            for sprite in self.obstacle_sprites:
-                if hasattr(sprite, "hitbox") and sprite.hitbox.colliderect(self.hitbox):
-                    if self.direction.y > 0:
+                elif direction == "vertical":
+                    if self.direction.y > 0:  # Vers le bas
                         self.hitbox.bottom = sprite.hitbox.top
-                    if self.direction.y < 0:
+                    elif self.direction.y < 0:  # Vers le haut
                         self.hitbox.top = sprite.hitbox.bottom
 
     def cooldowns(self):
-        """Gère le cooldown de l'attaque du joueur.
-        Pendant l'attaque, le joueur ne peut pas bouger (NO_SPEED).
-        Une fois le cooldown terminé, l'attaque s'arrête et la vitesse normale est rétablie.
-        """
-
-        if self.attack_time is None:
-            self.attack_time = pygame.time.get_ticks()
-        if self.attack_time:
-            if pygame.time.get_ticks() - self.attack_time >= self.attack_cooldown:
-                self.attacking = False
-                self.speed = PLAYER_SPEED
-            if pygame.time.get_ticks() - self.attack_time < self.attack_cooldown:
-                print("Attaque en cours, cooldown actif.")
-                self.speed = PLAYER_NO_SPEED
+        """Gestion du cooldown des attaques."""
+        current_time = pygame.time.get_ticks()
+        if self.attacking and current_time - self.attack_time < self.attack_cooldown:
+            self.speed = PLAYER_NO_SPEED
+        else:
+            self.attacking = False
 
     def update(self):
-        """update du joueur"""
+        """Mise à jour du joueur."""
         self.input()
         self.cooldowns()
-        self.move(self.speed)
+        self.move()

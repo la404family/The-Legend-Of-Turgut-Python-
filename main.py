@@ -53,6 +53,7 @@ class Game:
     def _handle_events(self):
         """Gère les événements du jeu"""
         for event in pygame.event.get():
+            # si la touche échappe est pressée, on quitte le jeu
             if event.type == pygame.QUIT:
                 self.running = False
 

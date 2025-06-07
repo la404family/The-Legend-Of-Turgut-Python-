@@ -48,3 +48,10 @@ Merci d’avoir pris le temps de découvrir notre projet.
 N’hésitez pas à tester le jeu, à nous faire des retours… ou même à rejoindre l’aventure !
 
 ---
+
+### 🚀 Les bugs ?!
+
+Les bugs font partie du jeu !
+
+- Le claviers n'est pas optimisé le clavier ne gère qu'une seule touche à la fois
+- Il y a un souci d'optimisation, on le sens quand on cherche à fermer le jeu
