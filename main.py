@@ -1,6 +1,5 @@
 import pygame
 import sys
-
 from random import choice
 from settings.settings import *
 from functions.debug import debug
@@ -54,6 +53,8 @@ class Game:
         """Gère les événements du jeu"""
         for event in pygame.event.get():
             # si la touche échappe est pressée, on quitte le jeu
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                self.running = False
             if event.type == pygame.QUIT:
                 self.running = False
 
