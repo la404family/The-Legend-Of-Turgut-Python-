@@ -28,13 +28,13 @@ Touche : z, Code : 17  -- Haut
 Touche : s, Code : 31  -- Bas
 Pour LES ACTIONS :
 Touche : u, Code : 22   -- touche X
-Touche : i, Code : 23   -- touche B
-Touche : o, Code : 24   -- touche A
-Touche : p, Code : 25   -- touche Y
-Touche : j, Code : 36   -- touche L
-Touche : k, Code : 37   -- touche R
-Touche : l, Code : 38   -- touche M
-Touche : m, Code : 39   -- touche N
+Touche : i, Code : 23   -- touche Y
+Touche : o, Code : 24   -- touche LT
+Touche : p, Code : 25   -- touche RT
+Touche : j, Code : 36   -- touche A
+Touche : k, Code : 37   -- touche B
+Touche : l, Code : 38   -- touche LB
+Touche : m, Code : 39   -- touche RB
 Pour LES TOUCHES DE FONCTION :
 Touche : enter, Code : 28
 Touche : espace, Code : 57

@@ -35,7 +35,6 @@ class Game:
             pygame.display.set_icon(icon)
         except:
             debug("Could not load favicon", 10, 10)
-
         pygame.display.set_caption("The Legend of Turgut")
 
     def run(self):

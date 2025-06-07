@@ -21,10 +21,15 @@ class Player(pygame.sprite.Sprite):
                                         PLAYER_HITBOX_OFFSET)
         self.direction = pygame.math.Vector2()
         self.speed = PLAYER_SPEED
+        self.attacking = False
+        self.attack_cooldown = ATTACK_COOLDOWN1
+        self.attack_time = None
         self.obstacle_sprites = obstacle_sprites
 
     def input(self):
-        """initialisation du clavier et du joystick"""
+        """
+        MOUVEMENT DU JOUEUR
+        """
 
         """ initialisation des variables de direction du joueur"""
         global player_direction_up
@@ -83,6 +88,55 @@ class Player(pygame.sprite.Sprite):
             self.direction = pygame.math.Vector2(0, 0)
             player_current_direction = "stay"
 
+        """
+        ACTIONS DU JOUEUR
+        Touche : u, Code : 22   -- touche X
+        Touche : i, Code : 23   -- touche Y
+        Touche : o, Code : 24   -- touche LB
+        Touche : p, Code : 25   -- touche RT
+        Touche : j, Code : 36   -- touche A
+        Touche : k, Code : 37   -- touche B
+        Touche : l, Code : 38   -- touche RB
+        Touche : m, Code : 39   -- touche RB
+        """
+        # dictionnaire pour les touches d'attaque
+        attack_buttons = (
+            # touches u, i, j, k
+            handler.event_scan_code in {22, 23, 36, 37} or
+            (joystick_handler.joystick is not None and (
+                joystick_handler.joystick.get_button(0) or  # bouton A
+                joystick_handler.joystick.get_button(1) or  # bouton B
+                joystick_handler.joystick.get_button(2) or  # bouton X
+                joystick_handler.joystick.get_button(3)     # bouton Y
+            ))
+        )
+        # dictionnaire pour les touches de course
+        run_buttons = (
+            # touches o, p, l, m
+            handler.event_scan_code in {24, 25, 38, 39} or
+            (joystick_handler.joystick is not None and (
+                joystick_handler.joystick.get_button(4) or  # bouton LB
+                joystick_handler.joystick.get_button(5) or  # bouton RB
+                joystick_handler.joystick.get_axis(4) > 0.2 or  # trigger LT
+                joystick_handler.joystick.get_axis(5) > 0.2   # trigger RT
+            ))
+        )
+        # Gestion de l'état d'attaque
+        if attack_buttons and not self.attacking:
+            self.attacking = True
+            self.speed = PLAYER_NO_SPEED
+            self.attack_time = pygame.time.get_ticks()
+        elif not attack_buttons:
+            self.attacking = False
+
+        # Gestion de la vitesse du joueur
+        if run_buttons and not self.attacking:
+            self.speed = PLAYER_RUN_SPEED
+        elif not run_buttons and not self.attacking:
+            self.speed = PLAYER_SPEED
+        else:
+            self.speed = PLAYER_NO_SPEED
+
     def move(self, speed):
         """déplacement du joueur"""
         self.hitbox.x += self.direction.x * speed
@@ -110,7 +164,19 @@ class Player(pygame.sprite.Sprite):
                     if self.direction.y < 0:
                         self.hitbox.top = sprite.hitbox.bottom
 
+    def cooldowns(self):
+        """gère le cooldown de l'attaque"""
+        current_time = pygame.time.get_ticks()
+        # Durant l'attaque, on ne peut pas bouger NO_SPEED
+        if self.attacking and current_time - self.attack_time >= self.attack_cooldown:
+            self.attacking = False
+            self.speed = PLAYER_SPEED
+
+        if self.attacking:
+            self.speed = PLAYER_NO_SPEED
+
     def update(self):
         """update du joueur"""
         self.input()
+        self.cooldowns()
         self.move(self.speed)

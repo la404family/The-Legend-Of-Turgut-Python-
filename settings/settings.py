@@ -14,8 +14,15 @@ FPS = 60
 TILE_SIZE = 16
 # Vitesse du joueur
 PLAYER_SPEED = 2
+PLAYER_RUN_SPEED = 4
+PLAYER_NO_SPEED = 0
+# Temps d'attaque en millisecondes
+ATTACK_COOLDOWN1 = 5000
+ATTACK_COOLDOWN2 = 1000
+ATTACK_COOLDOWN3 = 1500
+ATTACK_COOLDOWN4 = 2000
 # Décalage de la hitbox du joueur
-PLAYER_HITBOX_OFFSET = 2
+PLAYER_HITBOX_OFFSET = 4
 # Teste de la carte du monde
 WORLD_MAP_TEST = [
     ["x", "x", "x", "x", "x", "x", "x", "x", "x",
