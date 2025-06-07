@@ -28,20 +28,25 @@ class Player(pygame.sprite.Sprite):
     def import_player_assets(self):
         """Importe les assets du joueur"""
         player_assets = {
-            "up1": get_os_adapted_path("imagesOfTurgut", "row-1-column-4.png"),
+            "up1": get_os_adapted_path("imagesOfTurgut", "row-3-column-1.png"),
             "down1": get_os_adapted_path("imagesOfTurgut", "row-2-column-6.png"),
-            "left1": get_os_adapted_path("imagesOfTurgut", "row-3-column-6.png"),
+            "left1": get_os_adapted_path("imagesOfTurgut", "row-3-column-5.png"),
             "right1": get_os_adapted_path("imagesOfTurgut", "row-3-column-8.png"),
 
-            "up2": get_os_adapted_path("imagesOfTurgut", "row-1-column-5.png"),
+            "up2": get_os_adapted_path("imagesOfTurgut", "row-3-column-2.png"),
             "down2": get_os_adapted_path("imagesOfTurgut", "row-2-column-7.png"),
-            "left2": get_os_adapted_path("imagesOfTurgut", "row-6-column-3.png"),
+            "left2": get_os_adapted_path("imagesOfTurgut", "row-3-column-6.png"),
             "right2": get_os_adapted_path("imagesOfTurgut", "row-3-column-7.png"),
 
             "up_attack": get_os_adapted_path("imagesOfTurgut", "row-7-column-4.png"),
             "down_attack": get_os_adapted_path("imagesOfTurgut", "row-7-column-3.png"),
             "left_attack": get_os_adapted_path("imagesOfTurgut", "row-7-column-5.png"),
             "right_attack": get_os_adapted_path("imagesOfTurgut", "row-7-column-6.png"),
+
+            "up_idle_attack": get_os_adapted_path("imagesOfTurgut", "row-7-column-4.png"),
+            "down_idle_attack": get_os_adapted_path("imagesOfTurgut", "row-7-column-3.png"),
+            "left_idle_attack": get_os_adapted_path("imagesOfTurgut", "row-7-column-5.png"),
+            "right_idle_attack": get_os_adapted_path("imagesOfTurgut", "row-7-column-6.png"),
 
             "up_idle": get_os_adapted_path("imagesOfTurgut", "row-3-column-3.png"),
             "down_idle": get_os_adapted_path("imagesOfTurgut", "row-2-column-8.png"),
@@ -140,14 +145,15 @@ class Player(pygame.sprite.Sprite):
             joystick and any(joystick.get_button(btn)
                              for btn in self.joystick_buttons['attack'])
         )
-        if attack_pressed and self.status.startswith("down"):
-            self.status = "down_attack"
-        if attack_pressed and self.status.startswith("up"):
-            self.status = "up_attack"
-        if attack_pressed and self.status.startswith("left"):
-            self.status = "left_attack"
-        if attack_pressed and self.status.startswith("right"):
-            self.status = "right_attack"
+        if self.attacking:
+            if self.status == "up":
+                self.status = "up_attack"
+            elif self.status == "down":
+                self.status = "down_attack"
+            elif self.status == "left":
+                self.status = "left_attack"
+            elif self.status == "right":
+                self.status = "right_attack"
 
         if attack_pressed and not self.attacking:
             self.attack_time = pygame.time.get_ticks()
@@ -210,18 +216,45 @@ class Player(pygame.sprite.Sprite):
             self.status = self.status + "_attack"
         else:
             self.attacking = False
+            # Mettre le status par rapport à la direction
+            if self.status.endswith("idle") or self.status.endswith("attack"):
+                print(f"Status: {self.status}")
+                # supprimer le suffixe "_attack" si présent
+                self.status = self.status.replace("_attack", "")
 
     def animate(self):
-        animation = self.animations[self.status]
-        if not animation:
-            print(f"Animation not found for status: {self.status}")
-            return
-
         """Animation du joueur en fonction de son statut."""
-        if self.status.endswith("_idle"):
-            self.image = self.animations[self.status]
-        elif self.status.endswith("_attack"):
-            self.image = self.animations[self.status]
+        if self.status.endswith("_attack"):
+            if self.status.startswith("up"):
+                self.image = self.animations.get(
+                    "up_idle_attack", self.animations)
+            elif self.status.startswith("down"):
+                self.image = self.animations.get(
+                    "down_idle_attack", self.animations)
+            elif self.status.startswith("left"):
+                self.image = self.animations.get(
+                    "left_idle_attack", self.animations)
+            elif self.status.startswith("right"):
+                self.image = self.animations.get(
+                    "right_idle_attack", self.animations)
+        elif self.status.endswith("_idle"):
+            if self.status.startswith("up"):
+                self.image = self.animations["up_idle"]
+            elif self.status.startswith("down"):
+                self.image = self.animations["down_idle"]
+            elif self.status.startswith("left"):
+                self.image = self.animations["left_idle"]
+            elif self.status.startswith("right"):
+                self.image = self.animations["right_idle"]
+            elif self.status.endswith("_attack"):
+                if self.status.startswith("up"):
+                    self.image = self.animations["up_idle_attack"]
+                elif self.status.startswith("down"):
+                    self.image = self.animations["down_idle_attack"]
+                elif self.status.startswith("left"):
+                    self.image = self.animations["left_idle_attack"]
+                elif self.status.startswith("right"):
+                    self.image = self.animations["right_idle_attack"]
         elif self.status.endswith("_hit"):
             self.image = self.animations[self.status]
         elif self.status.endswith("_dead"):
@@ -229,22 +262,25 @@ class Player(pygame.sprite.Sprite):
         elif self.status.endswith("_protect"):
             self.image = self.animations[self.status]
         else:
-            # # Animation de marche est composée de deux images
-            # if self.status.startswith("up"):
-            #     self.image = self.animations["up1"] if self.direction.y < 0 else self.animations["up2"]
-            # elif self.status.startswith("down"):
-            #     self.image = self.animations["down1"] if self.direction.y > 0 else self.animations["down2"]
-            # elif self.status.startswith("left"):
-            #     self.image = self.animations["left1"] if self.direction.x < 0 else self.animations["left2"]
-            # elif self.status.startswith("right"):
-            #     self.image = self.animations["right1"] if self.direction.x > 0 else self.animations["right2"]
-            print(f"Unhandled status: {self.status}")
+            # Animation de marche se compose de deux images down1 et down2
+            if self.status.startswith("down"):
+                self.image = self.animations["down1"] if pygame.time.get_ticks(
+                ) % 500 < 250 else self.animations["down2"]
+            elif self.status.startswith("up"):
+                self.image = self.animations["up1"] if pygame.time.get_ticks(
+                ) % 500 < 250 else self.animations["up2"]
+            elif self.status.startswith("left"):
+                self.image = self.animations["left1"] if pygame.time.get_ticks(
+                ) % 500 < 250 else self.animations["left2"]
+            elif self.status.startswith("right"):
+                self.image = self.animations["right1"] if pygame.time.get_ticks(
+                ) % 500 < 250 else self.animations["right2"]
 
     def update(self):
         """Mise à jour du joueur."""
         self.input()
         self.cooldowns()
         self.get_status()
-        # self.animate()
+        self.animate()
         print(f"Player status: {self.status}")  # Debugging line
         self.move()
