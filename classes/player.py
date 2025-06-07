@@ -75,7 +75,6 @@ class Player(pygame.sprite.Sprite):
             converted_image = pygame.image.load(path).convert_alpha()
             player_assets[key] = converted_image
             self.animations = player_assets
-            print(self.animations)
 
     def _setup_controls(self):
         """Initialisation des contrôles clavier et manette."""
@@ -218,7 +217,6 @@ class Player(pygame.sprite.Sprite):
             self.attacking = False
             # Mettre le status par rapport à la direction
             if self.status.endswith("idle") or self.status.endswith("attack"):
-                print(f"Status: {self.status}")
                 # supprimer le suffixe "_attack" si présent
                 self.status = self.status.replace("_attack", "")
 
@@ -282,5 +280,5 @@ class Player(pygame.sprite.Sprite):
         self.cooldowns()
         self.get_status()
         self.animate()
-        print(f"Player status: {self.status}")  # Debugging line
+
         self.move()
