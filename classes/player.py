@@ -152,22 +152,31 @@ class Player(pygame.sprite.Sprite):
                              for btn in self.joystick_buttons['attack'])
         )
         # print en fonction de la touche d'attaque pressée
-        if joystick:
-            for btn in self.joystick_buttons['attack']:
-                if joystick.get_button(btn):
-                    print(f"Joystick button {btn} pressed for attack")
-                if btn == 0:
-                    self.attack_type = "attack1"
-                    self.attack_cooldown = ATTACK_COOLDOWN1
-                elif btn == 1:
-                    self.attack_type = "attack2"
-                    self.attack_cooldown = ATTACK_COOLDOWN2
-                elif btn == 2:
-                    self.attack_type = "attack3"
-                    self.attack_cooldown = ATTACK_COOLDOWN3
-                elif btn == 3:
-                    self.attack_type = "attack4"
-                    self.attack_cooldown = ATTACK_COOLDOWN4
+        for btn in self.joystick_buttons['attack']:
+            if joystick.get_button(btn):
+                print(f"Joystick button {btn} pressed for attack")
+
+                # Déterminer le type d'attaque en fonction du bouton pressé
+                if btn == 0:  # Bouton A/X selon la manette
+                    self.weapon_index = 0
+                elif btn == 1:  # Bouton B/Circle
+                    self.weapon_index = 1
+                elif btn == 2:  # Bouton X/Square
+                    self.weapon_index = 2
+                elif btn == 3:  # Bouton Y/Triangle
+                    self.weapon_index = 3
+
+                # Mettre à jour les variables d'attaque
+                self.attack_type = list(WEAPON_DATA.keys())[self.weapon_index]
+                weapon_data = WEAPON_DATA[self.attack_type]
+                self.attack_cooldown = weapon_data["cooldown"]
+
+                # Créer l'attaque si le cooldown est terminé
+                if not self.attacking and not self.attack_cooldown > 0:
+                    self.create_attack()
+                    self.attacking = True
+                    self.attack_time = pygame.time.get_ticks()
+                break  # Sortir de la boucle après avoir traité le premier bouton pressé
         if self.attacking:
             self.create_attack()
             if self.status == "up":

@@ -31,27 +31,54 @@ WEAPON_DATA = {
         "name": "Hache1",
         "damage": 20,
         "cooldown": ATTACK_COOLDOWN1,
-        "sprite": get_os_adapted_path("assets", "hache.png")
+        "sprite": get_os_adapted_path("assets", "hache.png"),
+        "animation": {
+            "type": "rotate",
+            "rotation_speed": 50,
+            "speed": 12,
+            "max_distance": 120
+        }
     },
     "attack2": {
         "name": "Hache2",
         "damage": 10,
         "cooldown": ATTACK_COOLDOWN2,
-        "sprite": get_os_adapted_path("assets", "hache.png")
+        "sprite": get_os_adapted_path("assets", "hache.png"),
+        "animation": {
+            "type": "swing",
+            "rotation_speed": 25,
+            "speed": 5,
+            "max_distance": 80,
+            "swing_angle": 180
+        }
     },
     "attack3": {
         "name": "Hache3",
         "damage": 5,
         "cooldown": ATTACK_COOLDOWN3,
-        "sprite": get_os_adapted_path("assets", "hache.png")
+        "sprite": get_os_adapted_path("assets", "hache.png"),
+        "animation": {
+            "type": "stab",
+            "speed": 15,
+            "max_distance": 60,
+            "return_speed": 10
+        }
     },
     "attack4": {
         "name": "Hache4",
         "damage": 25,
         "cooldown": ATTACK_COOLDOWN4,
-        "sprite": get_os_adapted_path("assets", "hache.png")
+        "sprite": get_os_adapted_path("assets", "hache.png"),
+        "animation": {
+            "type": "spin",
+            "rotation_speed": 75,
+            "speed": 3,
+            "max_distance": 50,
+            "circles": 2
+        }
     }
 }
+
 # Teste de la carte du monde
 WORLD_MAP_TEST = [
     ["x", "x", "x", "x", "x", "x", "x", "x", "x",
