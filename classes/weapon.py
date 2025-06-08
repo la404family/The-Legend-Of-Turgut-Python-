@@ -6,33 +6,68 @@ from functions.get_os_adapted_path import get_os_adapted_path
 class Weapon(pygame.sprite.Sprite):
     def __init__(self, player, groups):
         super().__init__(*groups)
-        direction = player.status.split("_")[0]
-        # image d'attaque
-        self.image = pygame.Surface((16, 16))
-        # mettre la surface en rouge pour la visualisation
-        self.image = pygame.image.load(get_os_adapted_path(
+        self.player = player
+        self.direction = player.status.split("_")[0]
+
+        # Charger l'image originale
+        self.original_image = pygame.image.load(get_os_adapted_path(
             "assets", "hache.png")).convert_alpha()
-        # définir la position de l'arme par rapport au joueur
-        # si la direction contient "right", "left", "up" ou "down"
-        if "right" in direction:
+        self.image = self.original_image
+
+        # Variables pour l'animation
+        self.rotation_angle = 0
+        self.rotation_speed = 35  # Vitesse de rotation
+        self.speed = 8  # Vitesse de déplacement
+        self.distance_traveled = 0
+        self.max_distance = 100  # Distance maximale parcourue
+
+        # Position initiale
+        self.set_initial_position()
+
+    def set_initial_position(self):
+        """Définit la position initiale en fonction de la direction"""
+        offset = 20  # Distance initiale par rapport au joueur
+
+        if "right" in self.direction:
             self.rect = self.image.get_rect(
-                midleft=player.rect.midright - pygame.Vector2(10, 0))
-            # tourner l'image de 90 degrés vers la droite
-            self.image = pygame.transform.rotate(
-                self.image, -90)
-        elif "left" in direction:
+                midleft=self.player.rect.midright + pygame.Vector2(0, 0))
+            self.direction_vector = pygame.Vector2(1, 0)
+            self.initial_rotation = -90
+        elif "left" in self.direction:
             self.rect = self.image.get_rect(
-                midright=player.rect.midleft - pygame.Vector2(-10, 0))
-            # tourner l'image de 90 degrés vers la gauche
-            self.image = pygame.transform.rotate(
-                self.image, 90)
-        elif "up" in direction:
+                midright=self.player.rect.midleft + pygame.Vector2(0, 0))
+            self.direction_vector = pygame.Vector2(-1, 0)
+            self.initial_rotation = 90
+        elif "up" in self.direction:
             self.rect = self.image.get_rect(
-                midbottom=player.rect.midtop - pygame.Vector2(0, -10))
-            # l'image reste dans la même orientation
-        elif "down" in direction:
+                midbottom=self.player.rect.midtop + pygame.Vector2(0, 0))
+            self.direction_vector = pygame.Vector2(0, -1)
+            self.initial_rotation = 0
+        elif "down" in self.direction:
             self.rect = self.image.get_rect(
-                midtop=player.rect.midbottom - pygame.Vector2(0, 10))
-           # tourner l'image de 180 degrés
-            self.image = pygame.transform.rotate(
-                self.image, 180)
+                midtop=self.player.rect.midbottom + pygame.Vector2(0, 0))
+            self.direction_vector = pygame.Vector2(0, 1)
+            self.initial_rotation = 180
+
+        # Appliquer la rotation initiale
+        self.image = pygame.transform.rotate(
+            self.original_image, self.initial_rotation)
+        self.rotation_angle = self.initial_rotation
+
+    def update(self):
+        # Faire tourner l'image
+        self.rotation_angle = (self.rotation_angle + self.rotation_speed) % 360
+        self.image = pygame.transform.rotate(
+            self.original_image, self.rotation_angle)
+
+        # Garder le centre de l'image après rotation
+        old_center = self.rect.center
+        self.rect = self.image.get_rect(center=old_center)
+
+        # Déplacer l'arme dans la direction
+        self.rect.center += self.direction_vector * self.speed
+        self.distance_traveled += self.speed
+
+        # Supprimer l'arme si elle a parcouru sa distance maximale
+        if self.distance_traveled >= self.max_distance:
+            self.kill()

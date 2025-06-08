@@ -29,6 +29,7 @@ class Player(pygame.sprite.Sprite):
         self.weapon_index = 0  # Index de l'arme actuelle
         weapon = list(WEAPON_DATA.keys())[self.weapon_index]
         print(f"Current weapon: {weapon}")
+        self.attack_type = weapon
         self._setup_controls()
 
     def import_player_assets(self):
@@ -150,6 +151,23 @@ class Player(pygame.sprite.Sprite):
             joystick and any(joystick.get_button(btn)
                              for btn in self.joystick_buttons['attack'])
         )
+        # print en fonction de la touche d'attaque pressée
+        if joystick:
+            for btn in self.joystick_buttons['attack']:
+                if joystick.get_button(btn):
+                    print(f"Joystick button {btn} pressed for attack")
+                if btn == 0:
+                    self.attack_type = "attack1"
+                    self.attack_cooldown = ATTACK_COOLDOWN1
+                elif btn == 1:
+                    self.attack_type = "attack2"
+                    self.attack_cooldown = ATTACK_COOLDOWN2
+                elif btn == 2:
+                    self.attack_type = "attack3"
+                    self.attack_cooldown = ATTACK_COOLDOWN3
+                elif btn == 3:
+                    self.attack_type = "attack4"
+                    self.attack_cooldown = ATTACK_COOLDOWN4
         if self.attacking:
             self.create_attack()
             if self.status == "up":
