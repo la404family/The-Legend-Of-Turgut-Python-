@@ -6,7 +6,6 @@ from functions.debug import debug
 from functions.get_os_adapted_path import get_os_adapted_path
 from functions.apply_font import apply_font
 from classes.level import Level
-from classes.player import Player
 
 
 class Game:

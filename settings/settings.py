@@ -23,6 +23,35 @@ ATTACK_COOLDOWN3 = 1500
 ATTACK_COOLDOWN4 = 2000
 # Décalage de la hitbox du joueur
 PLAYER_HITBOX_OFFSET = 4
+# Données X,Y du placement aléatoire du joueur sur la carte
+PLAYER_START_POSITION = [(662, 615), (1591, 439), (1274, 817), (854, 1319), (1206, 1393), (913, 1587), (2287, 2139), (844, 2105), (1413, 2107), (1725, 1924), (1856, 2477), (2441, 31900), (
+    2559, 2367), (1952, 3317)]
+WEAPON_DATA = {
+    "attack1": {
+        "name": "Hache1",
+        "damage": 20,
+        "cooldown": ATTACK_COOLDOWN1,
+        "sprite": get_os_adapted_path("assets", "hache.png")
+    },
+    "attack2": {
+        "name": "Hache2",
+        "damage": 10,
+        "cooldown": ATTACK_COOLDOWN2,
+        "sprite": get_os_adapted_path("assets", "hache.png")
+    },
+    "attack3": {
+        "name": "Hache3",
+        "damage": 5,
+        "cooldown": ATTACK_COOLDOWN3,
+        "sprite": get_os_adapted_path("assets", "hache.png")
+    },
+    "attack4": {
+        "name": "Hache4",
+        "damage": 25,
+        "cooldown": ATTACK_COOLDOWN4,
+        "sprite": get_os_adapted_path("assets", "hache.png")
+    }
+}
 # Teste de la carte du monde
 WORLD_MAP_TEST = [
     ["x", "x", "x", "x", "x", "x", "x", "x", "x",
@@ -122,6 +151,3 @@ MESSAGES_UNITE_TURC = {
         "Juntos, podemos superar qualquer obstáculo."
     ]
 }
-# Données X,Y du placement du joueur sur la carte
-PLAYER_START_POSITION = [(662, 615), (1591, 439), (1274, 817), (854, 1319), (1206, 1393), (913, 1587), (2287, 2139), (844, 2105), (1413, 2107), (1725, 1924), (1856, 2477), (2441, 31900), (
-    2559, 2367), (1952, 3317)]

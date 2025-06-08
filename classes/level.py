@@ -6,6 +6,7 @@ from functions.csv_reader import import_csv_layout
 from classes.tile import *
 from classes.player import *
 from classes.camera import YsortCameraGroup
+from classes.weapon import Weapon
 # Ensure this import matches the actual location of import_csv_layout
 
 
@@ -14,6 +15,7 @@ class Level:
         self .display_surface = pygame.display.get_surface()
         self.visible_sprites = YsortCameraGroup()
         self.obstacle_sprites = pygame.sprite.Group()
+        self.current_attack = None
         self.create_map()
 
     def create_map(self):
@@ -52,7 +54,17 @@ class Level:
         # Positionner le joueur à une position aléatoire
         random_position = random.choice(PLAYER_START_POSITION)
         self.player = Player(
-            (random_position), [self.visible_sprites], self.obstacle_sprites)
+            (random_position), [self.visible_sprites], self.obstacle_sprites, self.create_attack, self.destroy_attack)
+
+    def create_attack(self):
+        """Crée une attaque pour le joueur"""
+        self.current_attack = Weapon(self.player, [self.visible_sprites])
+
+    def destroy_attack(self):
+        """Supprime l'arme du joueur"""
+        if self.current_attack:
+            self.current_attack.kill()
+        self.current_attack = None
 
     def run(self):
         """Gère le rendu du niveau"""

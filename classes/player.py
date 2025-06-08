@@ -2,12 +2,13 @@ import pygame
 from settings.settings import *
 from functions.get_os_adapted_path import get_os_adapted_path
 from classes.joystick import joystick_handler
+from classes.weapon import *
 
 pygame.init()
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, pos, groups, obstacle_sprites):
+    def __init__(self, pos, groups, obstacle_sprites, create_attack, destroy_attack):
         super().__init__(groups)
         self.image = pygame.image.load(
             get_os_adapted_path("imagesOfTurgut", "row-6-column-1.png")
@@ -23,6 +24,11 @@ class Player(pygame.sprite.Sprite):
         self.attack_cooldown = ATTACK_COOLDOWN1
         self.attack_time = None
         self.obstacle_sprites = obstacle_sprites
+        self.create_attack = create_attack
+        self.destroy_attack = destroy_attack
+        self.weapon_index = 0  # Index de l'arme actuelle
+        weapon = list(WEAPON_DATA.keys())[self.weapon_index]
+        print(f"Current weapon: {weapon}")
         self._setup_controls()
 
     def import_player_assets(self):
@@ -145,6 +151,7 @@ class Player(pygame.sprite.Sprite):
                              for btn in self.joystick_buttons['attack'])
         )
         if self.attacking:
+            self.create_attack()
             if self.status == "up":
                 self.status = "up_attack"
             elif self.status == "down":
@@ -210,10 +217,13 @@ class Player(pygame.sprite.Sprite):
     def cooldowns(self):
         """Gestion du cooldown des attaques."""
         current_time = pygame.time.get_ticks()
+
         if self.attacking and current_time - self.attack_time < self.attack_cooldown:
             self.speed = PLAYER_NO_SPEED
             self.status = self.status + "_attack"
+
         else:
+            self.destroy_attack()
             self.attacking = False
             # Mettre le status par rapport à la direction
             if self.status.endswith("idle") or self.status.endswith("attack"):
@@ -224,17 +234,16 @@ class Player(pygame.sprite.Sprite):
         """Animation du joueur en fonction de son statut."""
         if self.status.endswith("_attack"):
             if self.status.startswith("up"):
-                self.image = self.animations.get(
-                    "up_idle_attack", self.animations)
+                self.image = self.animations.get("up_idle_attack", self.image)
             elif self.status.startswith("down"):
                 self.image = self.animations.get(
-                    "down_idle_attack", self.animations)
+                    "down_idle_attack", self.image)
             elif self.status.startswith("left"):
                 self.image = self.animations.get(
-                    "left_idle_attack", self.animations)
+                    "left_idle_attack", self.image)
             elif self.status.startswith("right"):
                 self.image = self.animations.get(
-                    "right_idle_attack", self.animations)
+                    "right_idle_attack", self.image)
         elif self.status.endswith("_idle"):
             if self.status.startswith("up"):
                 self.image = self.animations["up_idle"]
@@ -244,15 +253,6 @@ class Player(pygame.sprite.Sprite):
                 self.image = self.animations["left_idle"]
             elif self.status.startswith("right"):
                 self.image = self.animations["right_idle"]
-            elif self.status.endswith("_attack"):
-                if self.status.startswith("up"):
-                    self.image = self.animations["up_idle_attack"]
-                elif self.status.startswith("down"):
-                    self.image = self.animations["down_idle_attack"]
-                elif self.status.startswith("left"):
-                    self.image = self.animations["left_idle_attack"]
-                elif self.status.startswith("right"):
-                    self.image = self.animations["right_idle_attack"]
         elif self.status.endswith("_hit"):
             self.image = self.animations[self.status]
         elif self.status.endswith("_dead"):
