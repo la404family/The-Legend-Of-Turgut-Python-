@@ -220,38 +220,40 @@ class Player(pygame.sprite.Sprite):
 
         if self.attacking and current_time - self.attack_time < self.attack_cooldown:
             self.speed = PLAYER_NO_SPEED
+            # empécher le self.attacking de rester True
             self.status = self.status + "_attack"
-
-        else:
+        elif self.attacking and current_time - self.attack_time >= self.attack_cooldown:
+            self.attacking = False
             self.destroy_attack()
+        else:
             self.attacking = False
             # Mettre le status par rapport à la direction
-            if self.status.endswith("idle") or self.status.endswith("attack"):
-                # supprimer le suffixe "_attack" si présent
-                self.status = self.status.replace("_attack", "")
+        if self.status.endswith("attack"):
+            # supprimer le suffixe "_attack" si présent
+            self.status = self.status.replace("_attack", "")
 
     def animate(self):
         """Animation du joueur en fonction de son statut."""
-        if self.status.endswith("_attack"):
-            if self.status.startswith("up"):
+        if "attack" in self.status or self.attacking:
+            if "up" in self.status:
                 self.image = self.animations.get("up_idle_attack", self.image)
-            elif self.status.startswith("down"):
+            elif "down" in self.status:
                 self.image = self.animations.get(
                     "down_idle_attack", self.image)
-            elif self.status.startswith("left"):
+            elif "left" in self.status:
                 self.image = self.animations.get(
                     "left_idle_attack", self.image)
-            elif self.status.startswith("right"):
+            elif "right" in self.status:
                 self.image = self.animations.get(
                     "right_idle_attack", self.image)
-        elif self.status.endswith("_idle"):
-            if self.status.startswith("up"):
+        elif "idle" in self.status:
+            if "up" in self.status:
                 self.image = self.animations["up_idle"]
-            elif self.status.startswith("down"):
+            elif "down" in self.status:
                 self.image = self.animations["down_idle"]
-            elif self.status.startswith("left"):
+            elif "left" in self.status:
                 self.image = self.animations["left_idle"]
-            elif self.status.startswith("right"):
+            elif "right" in self.status:
                 self.image = self.animations["right_idle"]
         elif self.status.endswith("_hit"):
             self.image = self.animations[self.status]
@@ -280,5 +282,4 @@ class Player(pygame.sprite.Sprite):
         self.cooldowns()
         self.get_status()
         self.animate()
-
         self.move()

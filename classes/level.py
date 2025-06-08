@@ -3,70 +3,65 @@ import random
 from settings.settings import *
 from functions.get_os_adapted_path import get_os_adapted_path
 from functions.csv_reader import import_csv_layout
-from classes.tile import *
-from classes.player import *
+from classes.tile import Tile
+from classes.player import Player
 from classes.camera import YsortCameraGroup
 from classes.weapon import Weapon
-# Ensure this import matches the actual location of import_csv_layout
 
 
 class Level:
     def __init__(self):
-        self .display_surface = pygame.display.get_surface()
+        self.display_surface = pygame.display.get_surface()
         self.visible_sprites = YsortCameraGroup()
         self.obstacle_sprites = pygame.sprite.Group()
         self.current_attack = None
+        self.player = None
         self.create_map()
 
     def create_map(self):
-        # Empêche de relancer la création de la carte si elle a déjà été faite
-        if hasattr(self, 'map_created') and self.map_created:
-            return  # On quitte immédiatement si la carte est déjà créée
+        # Only create the map once
+        if getattr(self, 'map_created', False):
+            return
+        self.map_created = True
 
-        # Charger l'image des obstacles
+        # Load obstacle image once
         obstacle_image = pygame.image.load(
-            get_os_adapted_path("imagesOfMaps", "mapArbres.png")).convert_alpha()
-        taille_complete_de_limage = obstacle_image.get_size()
+            get_os_adapted_path("imagesOfMaps", "mapArbres.png")
+        ).convert_alpha()
+        img_width, img_height = obstacle_image.get_size()
 
-        # L'image est un obstacle seulement si elle contient des pixels non transparents
-        obstacle_tiles = []
-        for y in range(0, taille_complete_de_limage[1], TILE_SIZE):
-            for x in range(0, taille_complete_de_limage[0], TILE_SIZE):
+        # Only create tiles for non-transparent areas
+        for y in range(0, img_height, TILE_SIZE):
+            for x in range(0, img_width, TILE_SIZE):
                 tile_surface = obstacle_image.subsurface(
                     (x, y, TILE_SIZE, TILE_SIZE))
+                if any(tile_surface.get_at((tx, ty))[3] > 0 for tx in range(TILE_SIZE) for ty in range(TILE_SIZE)):
+                    Tile(
+                        (x, y),
+                        [self.visible_sprites, self.obstacle_sprites],
+                        'obstacle',
+                        tile_surface
+                    )
 
-                # Vérifier si la tuile contient au moins un pixel non transparent
-                has_obstacle = False
-                for ty in range(TILE_SIZE):
-                    for tx in range(TILE_SIZE):
-                        alpha = tile_surface.get_at((tx, ty))[3]
-                        if alpha > 0:
-                            has_obstacle = True
-                            break
-                    if has_obstacle:
-                        break
-
-                if has_obstacle:
-                    tile = Tile((x, y), [self.visible_sprites, self.obstacle_sprites],
-                                'obstacle', tile_surface)
-                    obstacle_tiles.append(tile)
-
-        # Positionner le joueur à une position aléatoire
+        # Place player at random position
         random_position = random.choice(PLAYER_START_POSITION)
         self.player = Player(
-            (random_position), [self.visible_sprites], self.obstacle_sprites, self.create_attack, self.destroy_attack)
+            random_position,
+            [self.visible_sprites],
+            self.obstacle_sprites,
+            self.create_attack,
+            self.destroy_attack
+        )
 
     def create_attack(self):
-        """Crée une attaque pour le joueur"""
-        self.current_attack = Weapon(self.player, [self.visible_sprites])
+        if self.current_attack is None:
+            self.current_attack = Weapon(self.player, [self.visible_sprites])
 
     def destroy_attack(self):
-        """Supprime l'arme du joueur"""
         if self.current_attack:
             self.current_attack.kill()
-        self.current_attack = None
+            self.current_attack = None
 
     def run(self):
-        """Gère le rendu du niveau"""
         self.visible_sprites.custom_draw(self.player)
         self.visible_sprites.update()
