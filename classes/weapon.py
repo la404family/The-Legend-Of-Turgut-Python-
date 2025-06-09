@@ -33,7 +33,6 @@ class Weapon(pygame.sprite.Sprite):
     def set_initial_position(self):
         """Définit la position initiale en fonction de la direction"""
         offset = 20  # Distance initiale par rapport au joueur
-
         if "right" in self.direction:
             self.rect = self.image.get_rect(
                 midleft=self.player.rect.midright + pygame.Vector2(0, 0))
@@ -77,7 +76,6 @@ class Weapon(pygame.sprite.Sprite):
             self.player.destroy_attack()
 
     def handle_swing_animation(self):
-        print("swing")
         # Rotation de l'arme
         self.rotation_angle = (self.rotation_angle +
                                self.animation_data["rotation_speed"]) % 360
@@ -89,7 +87,6 @@ class Weapon(pygame.sprite.Sprite):
         self.distance_traveled += self.animation_data["speed"]
 
     def handle_rotate_animation(self):
-        print("rotate")
         # Rotation de l'arme
         self.rotation_angle = (self.rotation_angle +
                                self.animation_data["rotation_speed"]) % 360
@@ -101,7 +98,6 @@ class Weapon(pygame.sprite.Sprite):
         self.distance_traveled += self.animation_data["speed"]
 
     def handle_stab_animation(self):
-        print("stab")
         amplitude = 0.5
         frequency = 50  # Amplitude et fréquence pour l'oscillation
 
@@ -122,13 +118,9 @@ class Weapon(pygame.sprite.Sprite):
             self.original_image, self.rotation_angle)
 
     def handle_spin_animation(self):
-
-        print("spin")
-
         # Initialisations si nécessaires
         if not hasattr(self, 'current_radius'):
-            self.current_radius = 20  # Rayon initial
-
+            self.current_radius = 2  # Rayon initial
         if not hasattr(self, 'orbit_angle'):
             self.orbit_angle = 0  # Angle pour la rotation autour du joueur
 
@@ -136,8 +128,9 @@ class Weapon(pygame.sprite.Sprite):
             self.self_spin_angle = 0  # Angle pour la rotation sur elle-même
 
         # Augmenter le rayon progressivement
-        self.current_radius += 0.3  # Ou un autre incrément selon l'effet souhaité
-
+        self.current_radius += 0.5  # Ou un autre incrément selon l'effet souhaité
+        if self.current_radius > 40:
+            self.current_radius = 40
         # Mise à jour de l'angle orbital
         self.orbit_angle = (self.orbit_angle +
                             self.animation_data["rotation_speed"]) % 360
@@ -154,7 +147,8 @@ class Weapon(pygame.sprite.Sprite):
 
         # Mise à jour de la rotation sur elle-même
         # Vitesse de rotation propre
-        self.self_spin_angle = (self.self_spin_angle + 10) % 360
+        # rotation
+        self.rotation_angle = (self.rotation_angle +
+                               self.animation_data["speed"]) % 360
         self.image = pygame.transform.rotate(
-            self.original_image, self.self_spin_angle)
-        self.rect = self.image.get_rect(center=self.rect.center)
+            self.original_image, self.rotation_angle)

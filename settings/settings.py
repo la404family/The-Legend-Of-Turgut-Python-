@@ -18,7 +18,7 @@ PLAYER_RUN_SPEED = 4
 PLAYER_NO_SPEED = 0
 # Temps d'attaque en millisecondes
 ATTACK_COOLDOWN1 = 500
-ATTACK_COOLDOWN2 = 2000
+ATTACK_COOLDOWN2 = 2500
 ATTACK_COOLDOWN3 = 1000
 ATTACK_COOLDOWN4 = 1250
 # Décalage de la hitbox du joueur
@@ -69,15 +69,15 @@ WEAPON_DATA = {
     },
     "attack4": {  # Attaque en S
         "name": "Hache4",
-        "damage": 50,
+        "damage": 10,
         "cooldown": ATTACK_COOLDOWN2,
         "sprite": get_os_adapted_path("assets", "hache.png"),
         "animation": {
             "type": "spin",  # Toujours "spin" mais maintenant c'est un S
-            "rotation_speed": 35,
-            "speed": 1,
-            "max_distance": 750,
-            "circles": 1,  # Rayon évolutif
+            "rotation_speed": 15,
+            "speed": 50,
+            "max_distance": 800,
+            "circles": 3,  # Rayon évolutif
         }
     }
 }
