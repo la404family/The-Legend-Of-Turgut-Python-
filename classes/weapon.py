@@ -76,59 +76,80 @@ class Weapon(pygame.sprite.Sprite):
         if self.distance_traveled >= self.animation_data["max_distance"] * (2 if self.is_returning else 1):
             self.player.destroy_attack()
 
-    def handle_rotate_animation(self):
-        # Rotation continue avec déplacement
+    def handle_swing_animation(self):
+        # Rotation de l'arme
         self.rotation_angle = (self.rotation_angle +
                                self.animation_data["rotation_speed"]) % 360
         self.image = pygame.transform.rotate(
             self.original_image, self.rotation_angle)
-
-        # Déplacement
+        # avancer l'arme dans la direction du joueur
         self.rect.center += self.direction_vector * \
             self.animation_data["speed"]
         self.distance_traveled += self.animation_data["speed"]
 
-    def handle_swing_animation(self):
-        # Rotation limitée avec déplacement
-        if abs(self.rotation_angle - self.initial_rotation) < self.animation_data["swing_angle"]:
-            self.rotation_angle = (
-                self.rotation_angle + self.animation_data["rotation_speed"]) % 360
-            self.image = pygame.transform.rotate(
-                self.original_image, self.rotation_angle)
+    def handle_rotate_animation(self):
+        # Rotation autour du joueur avec un rayon fixe de 35 pixels
+        self.rotation_angle += self.animation_data["rotation_speed"]
+        self.image = pygame.transform.rotate(
+            self.original_image, self.rotation_angle)
 
-        # Déplacement
-        self.rect.center += self.direction_vector * \
-            self.animation_data["speed"]
+        # Calcul de la position orbitale avec un rayon constant
+        # Utilise l'angle de rotation directement
+        angle_rad = math.radians(self.rotation_angle)
+        radius = 35  # Rayon fixe de 35 pixels
+        offset = pygame.Vector2(
+            math.cos(angle_rad) * radius,
+            math.sin(angle_rad) * radius
+        )
+        self.rect.center = self.player.rect.center + offset
+
+        # Mise à jour optionnelle pour suivre la progression (si nécessaire pour d'autres animations)
         self.distance_traveled += self.animation_data["speed"]
 
     def handle_stab_animation(self):
-        # Déplacement avant et retour
-        if not self.is_returning:
-            self.rect.center += self.direction_vector * \
-                self.animation_data["speed"]
-            self.distance_traveled += self.animation_data["speed"]
+        amplitude = 50
+        frequency = 0  # Amplitude et fréquence pour l'oscillation
 
-            if self.distance_traveled >= self.animation_data["max_distance"]:
-                self.is_returning = True
-        else:
-            self.rect.center -= self.direction_vector * \
-                self.animation_data["return_speed"]
-            self.distance_traveled += self.animation_data["return_speed"]
+        # alterner entre la droite et la gauche de manière plus régulière
+        direction = 1 if int(self.distance_traveled *
+                             frequency) % 2 == 0 else -1
+        offset = self.direction_vector.rotate(
+            90 * direction) * math.sin(self.distance_traveled * frequency) * amplitude
 
-    def handle_spin_animation(self):
-        # Rotation rapide sur place
+        self.rect.center += self.direction_vector * \
+            self.animation_data["speed"] + offset
+        self.distance_traveled += self.animation_data["speed"]
+
+        # rotation
         self.rotation_angle = (self.rotation_angle +
                                self.animation_data["rotation_speed"]) % 360
         self.image = pygame.transform.rotate(
             self.original_image, self.rotation_angle)
 
-        # Petit déplacement circulaire
-        circle_progress = self.distance_traveled / \
-            self.animation_data["max_distance"]
-        angle = circle_progress * 2 * math.pi * self.animation_data["circles"]
+    def handle_spin_animation(self):
+        # Rotation autour du joueur avec un rayon fixe de 35 pixels
+        self.rotation_angle += self.animation_data["rotation_speed"]
+        self.image = pygame.transform.rotate(
+            self.original_image, self.rotation_angle)
+
+        # Calcul de la position orbitale avec un rayon constant
+        # Utilise l'angle de rotation directement
+        angle_rad = math.radians(self.rotation_angle)
+        radius = 20  # Rayon fixe de 35 pixels
         offset = pygame.Vector2(
-            math.cos(angle) * 30,
-            math.sin(angle) * 30
+            math.cos(angle_rad) * radius,
+            math.sin(angle_rad) * radius
         )
         self.rect.center = self.player.rect.center + offset
+
+        # faire grossir le radius de l'arme tout les 5 pixels
+        if self.distance_traveled % 5 == 0:
+            radius += 1
+            offset = pygame.Vector2(
+                math.cos(angle_rad) * radius,
+                math.sin(angle_rad) * radius
+            )
+            self.rect.center = self.player.rect.center + offset
+
+        # Mise à jour optionnelle pour suivre la progression (si nécessaire pour d'autres animations)
         self.distance_traveled += self.animation_data["speed"]

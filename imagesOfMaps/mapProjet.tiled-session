@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "mapProjet..room.gmx.room.gmx.room.gmx.tmx",
+    "activeFile": "mapProjet.tmx",
     "expandedProjectPaths": [
     ],
     "fileStates": {
@@ -22,8 +22,8 @@
             "scale": 3,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 512,
-                "y": 255.83333333333331
+                "x": 1386.3333333333333,
+                "y": 1243.3333333333333
             }
         },
         "mapProjet.tmx#OverworldTurgut": {
@@ -40,8 +40,7 @@
     "map.tileWidth": 16,
     "map.width": 16,
     "openFiles": [
-        "mapProjet.tmx",
-        "mapProjet..room.gmx.room.gmx.room.gmx.tmx"
+        "mapProjet.tmx"
     ],
     "project": "mapProjet.tiled-project",
     "recentFiles": [

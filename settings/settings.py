@@ -18,7 +18,7 @@ PLAYER_RUN_SPEED = 4
 PLAYER_NO_SPEED = 0
 # Temps d'attaque en millisecondes
 ATTACK_COOLDOWN1 = 500
-ATTACK_COOLDOWN2 = 1000
+ATTACK_COOLDOWN2 = 750
 ATTACK_COOLDOWN3 = 1500
 ATTACK_COOLDOWN4 = 2000
 # Décalage de la hitbox du joueur
@@ -27,54 +27,57 @@ PLAYER_HITBOX_OFFSET = 4
 PLAYER_START_POSITION = [(662, 615), (1591, 439), (1274, 817), (854, 1319), (1206, 1393), (913, 1587), (2287, 2139), (844, 2105), (1413, 2107), (1725, 1924), (1856, 2477), (2441, 31900), (
     2559, 2367), (1952, 3317)]
 WEAPON_DATA = {
-    "attack1": {
+    "attack1": {  # Attaque en cercle
         "name": "Hache1",
+        "damage": 15,
+        "cooldown": ATTACK_COOLDOWN2,
+        "sprite": get_os_adapted_path("assets", "hache.png"),
+        "animation": {
+            "type": "rotate",  # Toujours "rotate" mais maintenant c'est un cercle
+            "rotation_speed": 85,
+            "speed": 5,
+            "max_distance": 360
+        }
+    },
+    "attack2": {  # Attaque droite
+        "name": "Hache2",
         "damage": 20,
         "cooldown": ATTACK_COOLDOWN1,
         "sprite": get_os_adapted_path("assets", "hache.png"),
         "animation": {
-            "type": "rotate",
-            "rotation_speed": 50,
-            "speed": 12,
-            "max_distance": 120
+            "type": "swing",  # Toujours "swing" mais maintenant c'est droit
+            "rotation_speed": 35,
+            "speed": 2,
+            "max_distance": 200,
+            "swing_angle": 180,  # Gardé mais pas utilisé
+            "circles": 2  # Gardé mais pas utilisé
         }
     },
-    "attack2": {
-        "name": "Hache2",
-        "damage": 10,
-        "cooldown": ATTACK_COOLDOWN2,
-        "sprite": get_os_adapted_path("assets", "hache.png"),
-        "animation": {
-            "type": "swing",
-            "rotation_speed": 25,
-            "speed": 5,
-            "max_distance": 80,
-            "swing_angle": 180
-        }
-    },
-    "attack3": {
+    "attack3": {  # Attaque en dent de scie
         "name": "Hache3",
         "damage": 5,
-        "cooldown": ATTACK_COOLDOWN3,
+        "cooldown": ATTACK_COOLDOWN1,
         "sprite": get_os_adapted_path("assets", "hache.png"),
         "animation": {
-            "type": "stab",
-            "speed": 15,
-            "max_distance": 60,
-            "return_speed": 10
+            "type": "stab",  # Toujours "stab" mais maintenant c'est une scie
+            "speed": 5,
+            "max_distance": 150,
+            "return_speed": 0,  # Gardé mais pas utilisé
+            "circles": 4,
+            "rotation_speed": 35
         }
     },
-    "attack4": {
+    "attack4": {  # Attaque en S
         "name": "Hache4",
         "damage": 25,
-        "cooldown": ATTACK_COOLDOWN4,
+        "cooldown": ATTACK_COOLDOWN1,
         "sprite": get_os_adapted_path("assets", "hache.png"),
         "animation": {
-            "type": "spin",
-            "rotation_speed": 75,
-            "speed": 3,
-            "max_distance": 50,
-            "circles": 2
+            "type": "spin",  # Toujours "spin" mais maintenant c'est un S
+            "rotation_speed": 20,
+            "speed": 1,
+            "max_distance": 350,
+            "circles": 2  # Gardé mais pas utilisé
         }
     }
 }
