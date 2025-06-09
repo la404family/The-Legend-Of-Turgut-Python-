@@ -28,7 +28,7 @@ class Player(pygame.sprite.Sprite):
         self.destroy_attack = destroy_attack
         self.weapon_index = 0  # Index de l'arme actuelle
         weapon = list(WEAPON_DATA.keys())[self.weapon_index]
-        print(f"Current weapon: {weapon}")
+
         self.attack_type = weapon
         self._setup_controls()
 
@@ -154,16 +154,24 @@ class Player(pygame.sprite.Sprite):
         # print en fonction de la touche d'attaque pressée
         for btn in self.joystick_buttons['attack']:
             if joystick.get_button(btn):
-                print(f"Joystick button {btn} pressed for attack")
 
                 # Déterminer le type d'attaque en fonction du bouton pressé
-                if btn == 0:  # Bouton A/X selon la manette
+                if btn == 0:
                     self.weapon_index = 0
-                elif btn == 1:  # Bouton B/Circle
+                elif btn == 1:
                     self.weapon_index = 1
-                elif btn == 2:  # Bouton X/Square
+                elif btn == 2:
                     self.weapon_index = 2
-                elif btn == 3:  # Bouton Y/Triangle
+                elif btn == 3:
+                    self.weapon_index = 3
+                # Déterminer le type d'attaque de la touche du clavier
+                if keys[self.key_mappings['attack'][0]]:
+                    self.weapon_index = 0
+                elif keys[self.key_mappings['attack'][1]]:
+                    self.weapon_index = 1
+                elif keys[self.key_mappings['attack'][2]]:
+                    self.weapon_index = 2
+                elif keys[self.key_mappings['attack'][3]]:
                     self.weapon_index = 3
 
                 # Mettre à jour les variables d'attaque

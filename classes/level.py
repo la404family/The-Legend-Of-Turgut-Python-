@@ -29,19 +29,19 @@ class Level:
             get_os_adapted_path("imagesOfMaps", "mapArbres.png")
         ).convert_alpha()
         img_width, img_height = obstacle_image.get_size()
-
-        # Only create tiles for non-transparent areas
-        for y in range(0, img_height, TILE_SIZE):
-            for x in range(0, img_width, TILE_SIZE):
-                tile_surface = obstacle_image.subsurface(
-                    (x, y, TILE_SIZE, TILE_SIZE))
-                if any(tile_surface.get_at((tx, ty))[3] > 0 for tx in range(TILE_SIZE) for ty in range(TILE_SIZE)):
-                    Tile(
-                        (x, y),
-                        [self.visible_sprites, self.obstacle_sprites],
-                        'obstacle',
-                        tile_surface
-                    )
+        # vérifier que l'image est bien charger
+        if obstacle_image:
+            for y in range(0, img_height, TILE_SIZE):
+                for x in range(0, img_width, TILE_SIZE):
+                    tile_surface = obstacle_image.subsurface(
+                        (x, y, TILE_SIZE, TILE_SIZE))
+                    if any(tile_surface.get_at((tx, ty))[3] > 0 for tx in range(TILE_SIZE) for ty in range(TILE_SIZE)):
+                        Tile(
+                            (x, y),
+                            [self.visible_sprites, self.obstacle_sprites],
+                            'obstacle',
+                            tile_surface
+                        )
 
         # Place player at random position
         random_position = random.choice(PLAYER_START_POSITION)
