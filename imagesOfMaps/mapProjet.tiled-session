@@ -19,11 +19,11 @@
             "scaleInDock": 1
         },
         "mapProjet.tmx": {
-            "scale": 3,
+            "scale": 1,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 1386.3333333333333,
-                "y": 1243.3333333333333
+                "x": 156,
+                "y": 1054
             }
         },
         "mapProjet.tmx#OverworldTurgut": {
