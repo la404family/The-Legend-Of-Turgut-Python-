@@ -29,8 +29,10 @@ class UI:
         # Bordure + fond
         border_rect = bg_rect.copy()
         border_rect.inflate_ip(6, 6)
-        pygame.draw.rect(self.display_surface, UI_BORDER_COLOR, border_rect)
-        pygame.draw.rect(self.display_surface, UI_BACKGROUND_COLOR, bg_rect)
+        pygame.draw.rect(self.display_surface, UI_BORDER_COLOR,
+                         border_rect, border_radius=5)
+        pygame.draw.rect(self.display_surface,
+                         UI_BACKGROUND_COLOR, bg_rect, border_radius=5)
 
         # Barre de progression
         ratio = current / max_amount
@@ -48,6 +50,49 @@ class UI:
         text_rect = text_surf.get_rect(center=bg_rect.center)
         self.display_surface.blit(text_surf, text_rect)
 
+    def show_kill_count(self, kill_count):
+        # Police pour le titre (peut utiliser la même ou une plus petite)
+        # ou pygame.font.Font(None, 24) pour une taille différente
+        title_font = self.font
+
+        # Texte du compteur de kills
+        count_text = f"{kill_count}"
+        count_surf = self.font.render(count_text, True, "#D2D42B")
+        # déplacement du rectangle compteur
+        count_rect = count_surf.get_rect(
+            midbottom=(self.display_surface.get_width() - 130,
+                       self.display_surface.get_height() - 20))
+
+        # Texte du titre
+        title_text = "COMPTEUR DE KILLS"
+        title_surf = title_font.render(title_text, True, "white")
+
+        # déplacement du rectangle titre
+        title_rect = title_surf.get_rect(
+            midbottom=(self.display_surface.get_width() - 130,
+                       self.display_surface.get_height() - 50))
+
+        # Calcul du rectangle englobant pour le fond
+        combined_rect = count_rect.union(
+            title_rect)  # Combine les deux rectangles
+        bg_rect = combined_rect.inflate(20, 20)  # Marge autour
+        border_rect = bg_rect.inflate(6, 6)  # Bordure extérieure
+        # déplacement du rectangle de fond pour le centrer
+        bg_rect.center = (self.display_surface.get_width() - 130,
+                          self.display_surface.get_height() - 47)
+
+        # Dessiner les éléments
+        # Bordure
+        pygame.draw.rect(self.display_surface, "#7A5C17",
+                         border_rect, 0, border_radius=5)  # surface, couleur, épaisseur, rayon de bordure
+        # Fond noir
+        pygame.draw.rect(self.display_surface, "black",
+                         bg_rect, 0, border_radius=4)
+        # Titre
+        self.display_surface.blit(title_surf, title_rect)
+        # Compteur
+        self.display_surface.blit(count_surf, count_rect)
+
     def display(self, player):
         # Position des icônes (à gauche des barres)
         health_icon_pos = (self.health_bar_rect.left-45,
@@ -64,3 +109,4 @@ class UI:
             player.health, player.stats['health'], self.health_bar_rect, HEALTH_BAR_COLOR)
         self.show_bar(
             player.energy, player.stats['energy'], self.energy_bar_rect, ENERGY_BAR_COLOR)
+        self.show_kill_count(player.kill_count)

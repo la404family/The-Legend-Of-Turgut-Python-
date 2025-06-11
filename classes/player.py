@@ -28,10 +28,10 @@ class Player(pygame.sprite.Sprite):
         self.destroy_attack = destroy_attack
         self.weapon_index = 0  # Index de l'arme actuelle
         weapon = list(WEAPON_DATA.keys())[self.weapon_index]
-        self.stats = {"health": 100, "energy": 100, "kills": 72}
-        self.health = self.stats["health"]/5
-        self.energy = self.stats["energy"]/2
-        self.kills = self.stats["kills"]
+        self.stats = {"health": 100, "energy": 100, "kill_count": 0}
+        self.health = self.stats["health"]
+        self.energy = self.stats["energy"]
+        self.kill_count = self.stats["kill_count"]
 
         self.attack_type = weapon
         self._setup_controls()

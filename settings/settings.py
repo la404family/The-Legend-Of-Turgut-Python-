@@ -95,7 +95,38 @@ WEAPON_DATA = {
         }
     }
 }
+ENNEMY_DATA = {
+    "ennemy1": {"health": 100,
+                "damage": 1,
+                "attack_radius": 500,
+                "notice_radius": 1000,
+                "attack_sound": get_os_adapted_path("sounds", "TEXTPIXEL.wav"),
+                "resistance": 1,
+                "speed": 2,
+                },
+    "ennemy2": {"health": 150,
+                "damage": 2,
+                "attack_radius": 250,
+                "notice_radius": 500,
+                "attack_sound": get_os_adapted_path("sounds", "TEXTPIXEL.wav"),
+                "resistance": 1,
+                "speed": 3, },
+    "ennemy3": {"health": 200,
+                "damage": 3,
+                "attack_radius": 175,
+                "notice_radius": 400,
+                "attack_sound": get_os_adapted_path("sounds", "TEXTPIXEL.wav"),
+                "resistance": 1,
+                "speed": 4, },
+    "ennemy4": {"health": 250,
+                "damage": 4,
+                "attack_radius": 100,
+                "notice_radius": 50,
+                "attack_sound": get_os_adapted_path("sounds", "TEXTPIXEL.wav"),
+                "resistance": 1,
+                "speed": 5, },
 
+}
 # Teste de la carte du monde
 WORLD_MAP_TEST = [
     ["x", "x", "x", "x", "x", "x", "x", "x", "x",
@@ -114,14 +145,6 @@ WORLD_MAP_TEST = [
         "x", "x", "x", "x", "x", "x", "x", "x"]
 ]
 
-TEXTES_DU_JEU = {
-    "welcome": "Bienvenue dans le jeu !",
-    "game_over": "Jeu terminé !",
-    "level_up": "Niveau supérieur atteint !",
-    "new_item": "Nouvel objet obtenu !",
-    "quest_complete": "Quête terminée !",
-    "error": "Une erreur est survenue !"
-}
 # Messages de l'unité turque
 MESSAGES_UNITE_TURC = {
     "msgTR": [

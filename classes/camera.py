@@ -15,7 +15,7 @@ class YsortCameraGroup(pygame.sprite.Group):
         self.half_width = self.display_surface.get_size()[0] // 2
         self.half_height = self.display_surface.get_size()[1] // 2
         self.offset = pygame.math.Vector2()
-        self.zoom_scale = 3  # Facteur de zoom (x3)
+        self.zoom_scale = 3.2  # Facteur de zoom (x3)
 
         # Chargement du floor avec vérification
         try:
