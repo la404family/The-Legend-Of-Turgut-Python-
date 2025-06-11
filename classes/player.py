@@ -142,7 +142,7 @@ class Player(pygame.sprite.Sprite):
                     self.direction.y = 1
                     self.status = "down"
 
-        # Normalisation pour éviter les vecteurs diagonaux
+                # Normalisation pour éviter les vecteurs diagonaux
         if self.direction.length() > 0:
             self.direction = self.direction.normalize()
 
@@ -151,28 +151,11 @@ class Player(pygame.sprite.Sprite):
             joystick and any(joystick.get_button(btn)
                              for btn in self.joystick_buttons['attack'])
         )
-        # print en fonction de la touche d'attaque pressée
-        for btn in self.joystick_buttons['attack']:
-            if joystick.get_button(btn):
 
-                # Déterminer le type d'attaque en fonction du bouton pressé
-                if btn == 0:
-                    self.weapon_index = 0
-                elif btn == 1:
-                    self.weapon_index = 1
-                elif btn == 2:
-                    self.weapon_index = 2
-                elif btn == 3:
-                    self.weapon_index = 3
-                # Déterminer le type d'attaque de la touche du clavier
-                if keys[self.key_mappings['attack'][0]]:
-                    self.weapon_index = 0
-                elif keys[self.key_mappings['attack'][1]]:
-                    self.weapon_index = 1
-                elif keys[self.key_mappings['attack'][2]]:
-                    self.weapon_index = 2
-                elif keys[self.key_mappings['attack'][3]]:
-                    self.weapon_index = 3
+        # --- Traitement des touches clavier ---
+        for i, key in enumerate(self.key_mappings['attack']):
+            if keys[key]:
+                self.weapon_index = i
 
                 # Mettre à jour les variables d'attaque
                 self.attack_type = list(WEAPON_DATA.keys())[self.weapon_index]
@@ -180,11 +163,31 @@ class Player(pygame.sprite.Sprite):
                 self.attack_cooldown = weapon_data["cooldown"]
 
                 # Créer l'attaque si le cooldown est terminé
-                if not self.attacking and not self.attack_cooldown > 0:
+                if not self.attacking and self.attack_cooldown <= 0:
                     self.create_attack()
                     self.attacking = True
                     self.attack_time = pygame.time.get_ticks()
-                break  # Sortir de la boucle après avoir traité le premier bouton pressé
+                break  # sortir après la première touche valide
+
+        # --- Traitement des boutons de manette ---
+        if joystick:
+            for i, btn in enumerate(self.joystick_buttons['attack']):
+                if joystick.get_button(btn):
+                    self.weapon_index = i
+
+                    # Mettre à jour les variables d'attaque
+                    self.attack_type = list(WEAPON_DATA.keys())[
+                        self.weapon_index]
+                    weapon_data = WEAPON_DATA[self.attack_type]
+                    self.attack_cooldown = weapon_data["cooldown"]
+
+                    # Créer l'attaque si le cooldown est terminé
+                    if not self.attacking and self.attack_cooldown <= 0:
+                        self.create_attack()
+                        self.attacking = True
+                        self.attack_time = pygame.time.get_ticks()
+                    break  # sortir après le premier bouton valide
+
         if self.attacking:
             self.create_attack()
             if self.status == "up":
