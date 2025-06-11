@@ -1,4 +1,6 @@
 import pygame
+import sys
+import os
 from settings.settings import *
 from classes.level import *
 from classes.player import *
@@ -15,10 +17,19 @@ class YsortCameraGroup(pygame.sprite.Group):
         self.offset = pygame.math.Vector2()
         self.zoom_scale = 3  # Facteur de zoom (x3)
 
-        # creation du floor
-        self.floor_surface = pygame.image.load(
-            get_os_adapted_path("imagesOfMaps", "mapFloor.png")).convert_alpha()
-        self.floor_rect = self.floor_surface.get_rect(topleft=(0, 0))
+        # Chargement du floor avec vérification
+        try:
+            floor_path = get_os_adapted_path("imagesOfMaps", "mapFloor.png")
+            if not os.path.isfile(floor_path):
+                raise FileNotFoundError(f"Fichier introuvable : {floor_path}")
+
+            self.floor_surface = pygame.image.load(floor_path).convert_alpha()
+            self.floor_rect = self.floor_surface.get_rect(topleft=(0, 0))
+
+        except Exception as e:
+            print(f"Erreur lors du chargement de l'image du sol : {e}")
+            pygame.quit()
+            sys.exit("Arrêt du programme : image essentielle manquante.")
 
         # Créer une surface pour le zoom
         self.internal_surface_size = (self.display_surface.get_size()[0] // self.zoom_scale,

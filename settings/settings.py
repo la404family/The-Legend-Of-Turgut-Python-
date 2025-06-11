@@ -4,9 +4,9 @@ from functions.get_os_adapted_path import get_os_adapted_path
 # Ce fichier contient les paramètres de configuration du jeu {Variables globales}
 root = tk.Tk()
 UI_FONT = get_os_adapted_path("font", "retro.ttf")
-UI_FONT_SIZE = 20
+UI_FONT_SIZE = 18
 # Couleur de fond de l'UI
-BAR_HEIGHT = 16  # Hauteur de la barre d'UI
+BAR_HEIGHT = 24  # Hauteur de la barre d'UI
 # Calculer la taille de l'écran et ajuster les dimensions
 SCREEN_WIDTH = root.winfo_screenwidth()
 SCREEN_HEIGHT = root.winfo_screenheight()
@@ -16,7 +16,7 @@ ENEGY_BAR_WIDTH = int(SCREEN_WIDTH * 0.4)  # Largeur de la barre de mana
 ITEM_BOX_SIZE = 16  # Taille de la boîte d'objets
 UI_BACKGROUND_COLOR = "#3E3E3E"
 UI_BORDER_COLOR = "#7A5C17"  # Couleur de la bordure de l'UI
-UI_TEXT_COLOR = "#FFFFFF"  # Couleur du texte de l'UI
+UI_TEXT_COLOR = "#DCD6D6"  # Couleur du texte de l'UI
 HEALTH_BAR_COLOR = "#9C1E1E"  # Couleur de la barre de vie
 ENERGY_BAR_COLOR = "#3B1C84"  # Couleur de la barre de mana
 UI_BORDER_COLOR_ACTIVE = "gold"
@@ -90,7 +90,7 @@ WEAPON_DATA = {
             "type": "spin",  # Toujours "spin" mais maintenant c'est un S
             "rotation_speed": 5,
             "speed": 50,
-            "max_distance": 1250,
+            "max_distance": 1720,
             "circles": 3,  # Rayon évolutif
         }
     }

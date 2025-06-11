@@ -26,24 +26,53 @@ class Level:
             return
         self.map_created = True
 
-        # Load obstacle image once
-        obstacle_image = pygame.image.load(
-            get_os_adapted_path("imagesOfMaps", "mapArbres.png")
-        ).convert_alpha()
-        img_width, img_height = obstacle_image.get_size()
-        # vérifier que l'image est bien charger
-        if obstacle_image:
+        try:
+            # Load obstacle image with error handling
+            obstacle_path = get_os_adapted_path(
+                "imagesOfMaps", "mapArbres.png")
+            obstacle_image = pygame.image.load(obstacle_path).convert_alpha()
+
+            # Verify image was loaded properly
+            if obstacle_image.get_size() == (0, 0):
+                raise pygame.error("Image failed to load properly")
+
+            img_width, img_height = obstacle_image.get_size()
+
+            # Process the image tiles
             for y in range(0, img_height, TILE_SIZE):
                 for x in range(0, img_width, TILE_SIZE):
-                    tile_surface = obstacle_image.subsurface(
-                        (x, y, TILE_SIZE, TILE_SIZE))
-                    if any(tile_surface.get_at((tx, ty))[3] > 0 for tx in range(TILE_SIZE) for ty in range(TILE_SIZE)):
-                        Tile(
-                            (x, y),
-                            [self.visible_sprites, self.obstacle_sprites],
-                            'obstacle',
-                            tile_surface
-                        )
+                    try:
+                        tile_surface = obstacle_image.subsurface(
+                            (x, y, TILE_SIZE, TILE_SIZE))
+
+                        # Check for any non-transparent pixels
+                        has_obstacle = False
+                        for tx in range(TILE_SIZE):
+                            for ty in range(TILE_SIZE):
+                                if tile_surface.get_at((tx, ty))[3] > 0:
+                                    has_obstacle = True
+                                    break
+                            if has_obstacle:
+                                break
+
+                        if has_obstacle:
+                            Tile(
+                                (x, y),
+                                [self.visible_sprites, self.obstacle_sprites],
+                                'obstacle',
+                                tile_surface
+                            )
+                    except ValueError as e:
+                        print(f"Error processing tile at ({x},{y}): {e}")
+                        continue
+
+        except pygame.error as e:
+            print(f"Failed to load obstacle image at {obstacle_path}: {e}")
+            # You might want to set map_created to False to retry next time
+            self.map_created = False
+        except Exception as e:
+            print(f"Unexpected error processing map: {e}")
+            self.map_created = False
 
         # Place player at random position
         random_position = random.choice(PLAYER_START_POSITION)
