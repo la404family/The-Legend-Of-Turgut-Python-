@@ -7,6 +7,7 @@ from classes.tile import Tile
 from classes.player import Player
 from classes.camera import YsortCameraGroup
 from classes.weapon import Weapon
+from classes.ui import UI  # Assuming UI is defined in classes/ui.py
 
 
 class Level:
@@ -17,6 +18,7 @@ class Level:
         self.current_attack = None
         self.player = None
         self.create_map()
+        self.ui = UI()  # Initialize UI, if needed later
 
     def create_map(self):
         # Only create the map once
@@ -65,3 +67,4 @@ class Level:
     def run(self):
         self.visible_sprites.custom_draw(self.player)
         self.visible_sprites.update()
+        self.ui.display(self.player)

@@ -1,11 +1,25 @@
-import pygame
-import os
+import tkinter as tk
 from functions.get_screen_dimensions import get_screen_dimensions
 from functions.get_os_adapted_path import get_os_adapted_path
 # Ce fichier contient les paramètres de configuration du jeu {Variables globales}
-
-pygame.init()
-
+root = tk.Tk()
+UI_FONT = get_os_adapted_path("font", "retro.ttf")
+UI_FONT_SIZE = 20
+# Couleur de fond de l'UI
+BAR_HEIGHT = 16  # Hauteur de la barre d'UI
+# Calculer la taille de l'écran et ajuster les dimensions
+SCREEN_WIDTH = root.winfo_screenwidth()
+SCREEN_HEIGHT = root.winfo_screenheight()
+# 40% de la taille de l'écran
+HEALTH_BAR_WIDTH = int(SCREEN_WIDTH * 0.4)  # Largeur de la barre de vie
+ENEGY_BAR_WIDTH = int(SCREEN_WIDTH * 0.4)  # Largeur de la barre de mana
+ITEM_BOX_SIZE = 16  # Taille de la boîte d'objets
+UI_BACKGROUND_COLOR = "#3E3E3E"
+UI_BORDER_COLOR = "#7A5C17"  # Couleur de la bordure de l'UI
+UI_TEXT_COLOR = "#FFFFFF"  # Couleur du texte de l'UI
+HEALTH_BAR_COLOR = "#9C1E1E"  # Couleur de la barre de vie
+ENERGY_BAR_COLOR = "#3B1C84"  # Couleur de la barre de mana
+UI_BORDER_COLOR_ACTIVE = "gold"
 # Utilisation de la fonction pour obtenir les dimensions de l'écran
 WIDTH, HEIGHT = get_screen_dimensions()
 # Images par seconde
@@ -18,7 +32,7 @@ PLAYER_RUN_SPEED = 4
 PLAYER_NO_SPEED = 0
 # Temps d'attaque en millisecondes
 ATTACK_COOLDOWN1 = 500
-ATTACK_COOLDOWN2 = 2500
+ATTACK_COOLDOWN2 = 3500
 ATTACK_COOLDOWN3 = 1000
 ATTACK_COOLDOWN4 = 1250
 # Décalage de la hitbox du joueur
@@ -74,9 +88,9 @@ WEAPON_DATA = {
         "sprite": get_os_adapted_path("assets", "hache.png"),
         "animation": {
             "type": "spin",  # Toujours "spin" mais maintenant c'est un S
-            "rotation_speed": 15,
+            "rotation_speed": 5,
             "speed": 50,
-            "max_distance": 800,
+            "max_distance": 1250,
             "circles": 3,  # Rayon évolutif
         }
     }
